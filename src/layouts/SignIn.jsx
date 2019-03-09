@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {apiUrl} from '../config.js'
+import { apiUrl } from '../config.js'
 
 const styles = theme => ({
   main: {
@@ -62,7 +62,23 @@ class SignIn extends React.Component {
 
   logIn(event) {
     event.preventDefault();
-    this.props.history.push('/admin/dashboard');
+    fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
+      .then(
+        function (response) {
+          if (response.status !== 200) {
+            alert("Invalid login or password")
+            return;
+          }
+          // Examine the text in the response
+          response.json().then(function (data) {
+            console.log(data);
+            this.props.history.push('/admin/dashboard');
+          });
+        }
+      )
+      .catch(function (err) {
+        console.log('Fetch Error :-S', err);
+      });
   }
 
   render() {
@@ -79,13 +95,13 @@ class SignIn extends React.Component {
           <form className={this.classes.form} onSubmit={this.logIn}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus 
-              value={this.state.email} onChange={evt => this.setState({email: evt.target.value})}/>
+              <Input id="email" name="email" autoComplete="email" autoFocus
+                value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
               <Input name="password" type="password" id="password" autoComplete="current-password"
-               value={this.state.password} onChange={evt => this.setState({password: evt.target.value})}/>
+                value={this.state.password} onChange={evt => this.setState({ password: evt.target.value })} />
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
