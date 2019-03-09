@@ -56,6 +56,12 @@ class SignIn extends React.Component {
       email: '',
       password: ''
     };
+    this.logIn = this.logIn.bind(this);
+  }
+
+  logIn(event) {
+    event.preventDefault();
+    this.props.history.push('/admin/dashboard');
   }
 
   render() {
@@ -69,7 +75,7 @@ class SignIn extends React.Component {
           <Typography component="h1" variant="h5">
             Sign in
         </Typography>
-          <form className={this.classes.form} onSubmit={() => alert(this.state.email + " " + this.state.password)}>
+          <form className={this.classes.form} onSubmit={this.logIn}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus 
