@@ -1,1 +1,1 @@
-export const apiUrl = "/some/url";
+export const apiUrl = "https://example.com";
