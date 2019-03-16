@@ -13,8 +13,7 @@ import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
-import {adminRoutes as routes} from "routes.js";
-
+import {interviewerRoutes as routes} from "routes.js";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
@@ -118,7 +117,14 @@ class Dashboard extends React.Component {
             <div className={classes.map}>{switchRoutes}</div>
           )}
           {this.getRoute() ? <Footer /> : null}
-          
+          <FixedPlugin
+            handleImageClick={this.handleImageClick}
+            handleColorClick={this.handleColorClick}
+            bgColor={this.state["color"]}
+            bgImage={this.state["image"]}
+            handleFixedClick={this.handleFixedClick}
+            fixedClasses={this.state.fixedClasses}
+          />
         </div>
       </div>
     );

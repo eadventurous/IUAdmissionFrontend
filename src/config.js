@@ -1,1 +1,2 @@
-export const apiUrl = "/some/url";
+export const apiUrl = "temp";
+export const profilePath = "/profile.json";
