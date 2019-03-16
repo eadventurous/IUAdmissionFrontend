@@ -13,29 +13,13 @@ import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
-import {adminRoutes as routes} from "routes.js";
-
+import {candidateRoutes, adminRoutes, interviewerRoutes, managerRoutes} from "routes.js";
+import {USERTYPE_NAME} from "config.js";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
-import image from "assets/img/sidebar-2.jpg";
+import image from "assets/img/crowd.jpg";
 import logo from "assets/img/inno_logo.png";
-
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-    })}
-  </Switch>
-);
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -45,9 +29,45 @@ class Dashboard extends React.Component {
       color: "blue",
       hasImage: true,
       fixedClasses: "dropdown show",
-      mobileOpen: false
+      mobileOpen: false,
+      redirecting: false,
+      userType: localStorage.getItem(USERTYPE_NAME)
     };
+    switch(this.state.userType) {
+      case "candidate":
+        this.routes = candidateRoutes;        
+        break;
+      case "admin":
+        this.routes = adminRoutes;
+        break;
+      case "interviewer":
+        this.routes = interviewerRoutes;
+        break;
+      case "manager":
+        this.routes = managerRoutes;
+        break;
+      default:
+        this.routes = candidateRoutes;
+    }
   }
+
+  switchRoutes() {
+    return (
+      <Switch>
+        {this.routes.map((prop, key) => {
+          if (prop.layout === "/dashboard") {
+            return (
+              <Route
+                path={prop.layout + prop.path}
+                component={prop.component}
+                key={key}
+              />
+            );
+          }
+        })}
+    </Switch>);
+  };
+
   handleImageClick = image => {
     this.setState({ image: image });
   };
@@ -90,11 +110,14 @@ class Dashboard extends React.Component {
     window.removeEventListener("resize", this.resizeFunction);
   }
   render() {
+    if(this.state.redirecting) {
+      this.props.history.push('/login');
+    }
     const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={routes}
+          routes={this.routes}
           logoText={"IU Admission"}
           logo={logo}
           image={this.state.image}
@@ -105,20 +128,19 @@ class Dashboard extends React.Component {
         />
         <div className={classes.mainPanel} ref="mainPanel">
           <Navbar
-            routes={routes}
+            routes={this.routes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
+              <div className={classes.container}>{this.switchRoutes()}</div>
             </div>
           ) : (
-            <div className={classes.map}>{switchRoutes}</div>
+            <div className={classes.map}>{this.switchRoutes()}</div>
           )}
           {this.getRoute() ? <Footer /> : null}
-          
         </div>
       </div>
     );

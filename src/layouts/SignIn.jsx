@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {apiUrl} from '../config.js'
+import {apiURL, loginSuffixURL, USERTYPE_NAME} from '../config.js'
 
 const styles = theme => ({
   main: {
@@ -60,9 +60,26 @@ class SignIn extends React.Component {
     this.logIn = this.logIn.bind(this);
   }
 
+  tryLoginRequest(login, password) {
+    fetch(apiURL+loginSuffixURL, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        'login': login,
+        'password': password
+      })})
+    .then(response => response.json())
+    .then(json => console.log(json));
+    
+  }
+
   logIn(event) {
     event.preventDefault();
-    this.props.history.push('/admin/dashboard');
+    this.tryLoginRequest(this.state.email, this.state.password);
+    localStorage.setItem(USERTYPE_NAME, 'candidate');
+    this.props.history.push('/dashboard');
   }
 
   render() {
@@ -78,7 +95,7 @@ class SignIn extends React.Component {
         </Typography>
           <form className={this.classes.form} onSubmit={this.logIn}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <InputLabel htmlFor="email">Email</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus 
               value={this.state.email} onChange={evt => this.setState({email: evt.target.value})}/>
             </FormControl>
