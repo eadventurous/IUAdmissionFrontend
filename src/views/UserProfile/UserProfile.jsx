@@ -15,7 +15,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import {apiUrl, profilePath} from "config.js"
+import { apiURL, loginSuffixURL, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
 
 const styles = {
   cardCategoryWhite: {
@@ -36,21 +36,26 @@ const styles = {
   }
 };
 
-class UserProfile extends Component
-{
+class UserProfile extends Component {
   constructor(props) {
     super();
     this.classes = props;
-    this.state={
+    this.state = {
       profileInfo: [],
+      authToken: localStorage.getItem(AUTHTOKEN_NAME)
     };
   }
 
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
+    fetch(apiURL + loginSuffixURL, {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        // 'Content-Type': 'application/json'
+      })
+    })
       .then(response => response.json())
-      .then(json => console.log(json))
-    //results=>{return results.json();}
+      .then(json => console.log(json));
   }
 
   render() {
@@ -182,7 +187,7 @@ class UserProfile extends Component
 
 // function UserProfile(props) {
 //   const { classes } = props;
-  
+
 // }
 
 export default withStyles(styles)(UserProfile);

@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {apiURL, loginSuffixURL, USERTYPE_NAME} from '../config.js'
+import {apiURL, loginSuffixURL, USERTYPE_NAME, AUTHTOKEN_NAME} from '../config.js'
 
 const styles = theme => ({
   main: {
@@ -61,10 +61,10 @@ class SignIn extends React.Component {
   }
 
   tryLoginRequest(login, password) {
-    fetch(apiURL+loginSuffixURL, {
+    fetch(apiURL + loginSuffixURL, {
       method: 'POST',
       headers: new Headers({
-        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/json'
       }),
       body: JSON.stringify({
         'login': login,

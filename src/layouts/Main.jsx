@@ -113,6 +113,12 @@ class Dashboard extends React.Component {
     if(this.state.redirecting) {
       this.props.history.push('/login');
     }
+    
+    if(this.props.location.pathname === '/dashboard')
+    {
+      this.props.history.push('/dashboard/profile');
+    }
+
     const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -132,7 +138,7 @@ class Dashboard extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and container classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
               <div className={classes.container}>{this.switchRoutes()}</div>
