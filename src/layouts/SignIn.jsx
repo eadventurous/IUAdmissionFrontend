@@ -63,7 +63,7 @@ class SignIn extends React.Component {
 
   logIn(event) {
     event.preventDefault();
-    /*fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
+    fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
       .then(
         function (response) {
           if (response.status !== 200) {
@@ -73,15 +73,18 @@ class SignIn extends React.Component {
           // Examine the text in the response
           response.json().then(function (data) {
             console.log(data);
+            this.props.dispatch({type: 'UPDATE', token: data.token});
             this.props.history.push('/admin/dashboard');
           });
         }
       )
       .catch(function (err) {
         console.log('Fetch Error :-S', err);
-      });*/
-    this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
-    this.props.history.push('/admin/dashboard');
+      });
+
+    //Debug code
+    /*this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
+    this.props.history.push('/admin/dashboard');*/
   }
 
   render() {
