@@ -14,7 +14,7 @@ import "assets/css/material-dashboard-react.css?v=1.6.0";
 const hist = createBrowserHistory();
 
 const initialState = {
-  token: "",
+  token: localStorage.getItem("TOKEN"),
 };
 
 function reducer(state = initialState, action) {
@@ -29,6 +29,10 @@ function reducer(state = initialState, action) {
 }
 
 const store = createStore(reducer);
+
+store.subscribe(() => {
+  localStorage.setItem('TOKEN', store.getState().token);
+});
 
 ReactDOM.render(
   <Provider store={store}>
