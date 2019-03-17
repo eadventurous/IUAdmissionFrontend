@@ -12,7 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { apiUrl } from '../config.js'
+import { apiUrl } from '../config.js';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   main: {
@@ -62,7 +63,7 @@ class SignIn extends React.Component {
 
   logIn(event) {
     event.preventDefault();
-    fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
+    /*fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
       .then(
         function (response) {
           if (response.status !== 200) {
@@ -78,7 +79,9 @@ class SignIn extends React.Component {
       )
       .catch(function (err) {
         console.log('Fetch Error :-S', err);
-      });
+      });*/
+    this.props.updateToken(this.state.login + "token");
+    this.props.history.push('/admin/dashboard');
   }
 
   render() {
@@ -127,4 +130,18 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+function mapStateToProps(state) {
+  return {
+    token: state.token
+  };
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    updateToken: () => dispatch({type: "UPDATE", token: ownProps.token}),
+  }
+};
+
+const SignInStyled = withStyles(styles)(SignIn);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInStyled);
