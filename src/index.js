@@ -22,7 +22,7 @@ function reducer(state = initialState, action) {
     case 'UPDATE':
       return {
         token: action.token,
-      }
+      };
     default:
       return state;
   }

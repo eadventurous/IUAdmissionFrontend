@@ -80,7 +80,7 @@ class SignIn extends React.Component {
       .catch(function (err) {
         console.log('Fetch Error :-S', err);
       });*/
-    this.props.updateToken(this.state.login + "token");
+    this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
     this.props.history.push('/admin/dashboard');
   }
 
@@ -136,12 +136,6 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    updateToken: () => dispatch({type: "UPDATE", token: ownProps.token}),
-  }
-};
-
 const SignInStyled = withStyles(styles)(SignIn);
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignInStyled);
+export default connect(mapStateToProps)(SignInStyled);
