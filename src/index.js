@@ -8,6 +8,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 // core components
 import Admin from "layouts/Admin.jsx";
 import SignIn from "layouts/SignIn.jsx";
+import SignUp from "layouts/SignUp.jsx";
 
 import "assets/css/material-dashboard-react.css?v=1.6.0";
 
@@ -39,6 +40,7 @@ ReactDOM.render(
     <Router history={hist}>
       <Switch>
         <Route path="/login" component={SignIn} />
+        <Route path="/signup" component={SignUp} />
         <Route path="/admin" component={Admin} />
         <Redirect from="/" to="/admin/dashboard" />
       </Switch>
