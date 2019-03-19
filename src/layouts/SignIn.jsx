@@ -13,6 +13,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {apiURL, loginSuffixURL, USERTYPE_NAME, AUTHTOKEN_NAME} from '../config.js'
+import { connect } from 'react-redux';
+
 
 const styles = theme => ({
   main: {
@@ -60,26 +62,30 @@ class SignIn extends React.Component {
     this.logIn = this.logIn.bind(this);
   }
 
-  tryLoginRequest(login, password) {
-    fetch(apiURL + loginSuffixURL, {
-      method: 'POST',
-      headers: new Headers({
-        // 'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        'login': login,
-        'password': password
-      })})
-    .then(response => response.json())
-    .then(json => console.log(json));
-    
-  }
-
   logIn(event) {
     event.preventDefault();
-    this.tryLoginRequest(this.state.email, this.state.password);
-    localStorage.setItem(USERTYPE_NAME, 'candidate');
-    this.props.history.push('/dashboard');
+    fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
+      .then(
+        function (response) {
+          if (response.status !== 200) {
+            alert("Invalid login or password")
+            return;
+          }
+          // Examine the text in the response
+          response.json().then(function (data) {
+            console.log(data);
+            this.props.dispatch({type: 'UPDATE', token: data.token});
+            this.props.history.push('/dashboard');
+          });
+        }
+      )
+      .catch(function (err) {
+        console.log('Fetch Error :-S', err);
+      });
+
+    //Debug code
+    /*this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
+    this.props.history.push('/admin/dashboard');*/
   }
 
   render() {
@@ -95,14 +101,14 @@ class SignIn extends React.Component {
         </Typography>
           <form className={this.classes.form} onSubmit={this.logIn}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus 
-              value={this.state.email} onChange={evt => this.setState({email: evt.target.value})}/>
+              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <Input id="email" name="email" autoComplete="email" autoFocus
+                value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
               <Input name="password" type="password" id="password" autoComplete="current-password"
-               value={this.state.password} onChange={evt => this.setState({password: evt.target.value})}/>
+                value={this.state.password} onChange={evt => this.setState({ password: evt.target.value })} />
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -128,4 +134,12 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+function mapStateToProps(state) {
+  return {
+    token: state.token
+  };
+}
+
+const SignInStyled = withStyles(styles)(SignIn);
+
+export default connect(mapStateToProps)(SignInStyled);
