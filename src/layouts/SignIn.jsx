@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { apiUrl } from '../config.js';
+import {apiURL, loginSuffixURL, USERTYPE_NAME, AUTHTOKEN_NAME} from '../config.js'
 import { connect } from 'react-redux';
+
 
 const styles = theme => ({
   main: {
@@ -74,7 +75,7 @@ class SignIn extends React.Component {
           response.json().then(function (data) {
             console.log(data);
             this.props.dispatch({type: 'UPDATE', token: data.token});
-            this.props.history.push('/admin/dashboard');
+            this.props.history.push('/dashboard');
           });
         }
       )
