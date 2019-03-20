@@ -15,7 +15,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import { apiURL, loginSuffixURL, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
+import { apiUrl, loginSuffixUrl, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
 
 const styles = {
   cardCategoryWhite: {
@@ -47,7 +47,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount() {
-    fetch(apiURL + loginSuffixURL, {
+    fetch(apiUrl + loginSuffixUrl, {
       method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,
@@ -139,6 +139,26 @@ class UserProfile extends Component {
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
+                      labelText="Skype Account"
+                      id="skype-account"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
+                      labelText="Telegram Alias"
+                      id="telegram-alias"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     {/* <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel> */}
                     <CustomInput
@@ -156,7 +176,10 @@ class UserProfile extends Component {
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary">Update Profile</Button>
+                <div className={this.classes.left}>
+                  <Button color="success">Update Profile</Button>
+                  <Button color="warning">Cancel</Button>
+                </div>
               </CardFooter>
             </Card>
           </GridItem>
@@ -168,14 +191,15 @@ class UserProfile extends Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h6 className={this.classes.cardCategory}>CEO / CO-FOUNDER</h6>
-                <h4 className={this.classes.cardTitle}>Alec Thompson</h4>
-                <p className={this.classes.description}>
-                  Description
-                </p>
                 <Button color="primary" round>
-                  Follow
+                  Change Photo
                 </Button>
+                <h5 className={this.classes.cardCategory}> Registered</h5>
+                <h4 className={this.classes.cardTitle}>Not Enrolled Yet</h4>
+                {/* <p className={this.classes.description}>
+                  Description
+                </p> */}
+                
               </CardBody>
             </Card>
           </GridItem>

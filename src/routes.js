@@ -11,6 +11,7 @@ import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
+import Documents from "views/Documents/Documents.jsx";
 import TableList from "views/TableList/TableList.jsx";
 // import Typography from "views/Typography/Typography.jsx";
 // import Icons from "views/Icons/Icons.jsx";
@@ -30,7 +31,7 @@ export const candidateRoutes = [
     path: "/documents",
     name: "Documents",
     icon: LibraryBooks,
-    component: UserProfile,
+    component: Documents,
     layout: "/dashboard"
   },
   {
