@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector-material-ui-new';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     main: {
@@ -48,6 +49,10 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
+    bottomlink: {
+        marginTop: theme.spacing.unit,
+        fontSize: 'small',
+    }
 });
 
 
@@ -153,6 +158,7 @@ class SignUp extends React.Component {
                             Sign up
                         </Button>
                     </form>
+                    <Link className={this.classes.bottomlink} to="/login">Sign in instead</Link>
                 </Paper>
             </main >
         );
