@@ -163,14 +163,10 @@ material-dashboard-react
         │   └── Maps.jsx
         ├── Notifications
         │   └── Notifications.jsx
-        ├── RTLPage
-        │   └── RTLPage.jsx
         ├── TableList
         │   └── TableList.jsx
         ├── Typography
         │   └── Typography.jsx
-        ├── UpgradeToPro
-        │   └── UpgradeToPro.jsx
         └── UserProfile
             └── UserProfile.jsx
 ```
