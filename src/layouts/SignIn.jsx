@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {apiUrl, loginSuffixUrl, USERTYPE_NAME, AUTHTOKEN_NAME} from '../config.js'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const styles = theme => ({
@@ -46,6 +47,10 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  bottomlink: {
+    marginTop: theme.spacing.unit,
+    fontSize: 'small',
+  }
 });
 
 
@@ -124,6 +129,8 @@ class SignIn extends React.Component {
               Sign in
           </Button>
           </form>
+          <Link className={this.classes.bottomlink} to="/">Forgot password?</Link>
+          <Link className={this.classes.bottomlink} to="/signup">No account yet?</Link>
         </Paper>
       </main>
     );
