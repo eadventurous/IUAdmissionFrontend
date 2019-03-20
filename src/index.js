@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { AUTHTOKEN_NAME, USERTYPE_NAME } from "config.js"
 
 // core components
 import MainLayout from "layouts/Main.jsx";
@@ -16,7 +17,7 @@ import "assets/css/material-dashboard-react.css?v=1.6.0";
 const hist = createBrowserHistory();
 
 const initialState = {
-  token: localStorage.getItem("TOKEN"),
+  token: localStorage.getItem(AUTHTOKEN_NAME),
 };
 
 function reducer(state = initialState, action) {
@@ -33,7 +34,7 @@ function reducer(state = initialState, action) {
 const store = createStore(reducer);
 
 store.subscribe(() => {
-  localStorage.setItem('TOKEN', store.getState().token);
+  localStorage.setItem(AUTHTOKEN_NAME, store.getState().token);
 });
 
 ReactDOM.render(

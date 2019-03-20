@@ -16,7 +16,7 @@ import {DropzoneArea} from 'material-ui-dropzone'
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import { apiUrl, loginSuffixUrl, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
+import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
 
 const styles = {
   cardCategoryWhite: {
@@ -55,7 +55,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount() {
-    fetch(apiUrl + loginSuffixUrl, {
+    fetch(apiUrl + profilePath, {
       method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,

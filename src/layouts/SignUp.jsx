@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { apiUrl } from '../config.js';
+import { apiUrl, registerPath } from '../config.js';
 import { connect } from 'react-redux';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -71,23 +71,32 @@ class SignUp extends React.Component {
 
     logIn(event) {
         event.preventDefault();
-        fetch(apiUrl + "/auth", { login: this.state.login, password: this.state.password })
+        fetch(apiUrl + registerPath, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            mode: "no-cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+                "Content-Type": "application/json",
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: JSON.stringify(this.state), // body data type must match "Content-Type" header
+        })
             .then(
-                function (response) {
-                    if (response.status !== 200) {
-                        alert("Invalid login or password")
-                        return;
-                    }
-                    // Examine the text in the response
-                    response.json().then(function (data) {
-                        console.log(data);
-                        this.props.dispatch({ type: 'UPDATE', token: data.token });
-                        this.props.history.push('/admin/dashboard');
-                    });
+              function (response) {
+                if (response.status !== 200) {
+                  alert("Invalid input")
+                  return;
                 }
+                // Examine the text in the response
+                response.json().then(function (data) {
+                  console.log(data);
+                  this.props.dispatch({type: 'UPDATE', token: data.token});
+                  this.props.history.push('/dashboard');
+                });
+              }
             )
             .catch(function (err) {
-                console.log('Fetch Error :-S', err);
+              console.log('Fetch Error :-S', err);
             });
 
         //Debug code
@@ -114,7 +123,7 @@ class SignUp extends React.Component {
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <MuiPhoneNumber defaultCountry={'ru'}
-                                value={this.state.tel} onChange={value => this.setState({ tel: value })} />
+                                value={this.state.phoneNumber} onChange={value => this.setState({ phoneNumber: value })} />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Email Address</InputLabel>
@@ -144,8 +153,8 @@ class SignUp extends React.Component {
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <CountryDropdown
-                                value={this.state.country}
-                                onChange={(val) => this.setState({country: val})}
+                                value={this.state.citizenship}
+                                onChange={(val) => this.setState({citizenship: val})}
                                 showDefaultOption={false}/>
                         </FormControl>
                         <Button
