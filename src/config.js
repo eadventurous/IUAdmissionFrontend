@@ -1,6 +1,6 @@
-export const apiUrl = "http://127.0.0.1:8080";
+export const apiUrl = "https://requestbin.fullcontact.com/15gjxuu1";
 export const loginSuffixUrl = "/";
-export const profilePath = "/profile.json";
+export const profilePath = "/";
 
 // mainly keys for accessing 'localStorage'
 export const AUTHTOKEN_NAME = "AUTHTOKEN";

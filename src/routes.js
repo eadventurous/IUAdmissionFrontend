@@ -11,6 +11,7 @@ import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
+import UserProfileEdit from "views/UserProfileEdit/UserProfileEdit.jsx";
 import Documents from "views/Documents/Documents.jsx";
 import TableList from "views/TableList/TableList.jsx";
 // import Typography from "views/Typography/Typography.jsx";
@@ -20,11 +21,19 @@ import NotificationsPage from "views/Notifications/Notifications.jsx";
 
 
 export const candidateRoutes = [
+  // {
+  //   path: "/profile",
+  //   name: "My Profile",
+  //   icon: Person,
+  //   component: UserProfile,
+  //   layout: "/dashboard"
+  // },
   {
-    path: "/profile",
-    name: "User Profile",
+    path: "/editprofile",
+    name: "Edit Profile",
     icon: Person,
-    component: UserProfile,
+    hidden: true,
+    component: UserProfileEdit,
     layout: "/dashboard"
   },
   {
