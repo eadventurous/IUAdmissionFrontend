@@ -75,16 +75,16 @@ class SignUp extends React.Component {
     }
 
     logIn(event) {
-        console.log(JSON.stringify(this.state));
         event.preventDefault();
         fetch(apiUrl + registerPath, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
-            mode: "no-cors", // no-cors, cors, *same-origin
+            // mode: "no-cors", // no-cors, cors, *same-origin
             //cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state), // body data type must match "Content-Type" header
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            body: JSON.stringify(this.state),
+             // body data type must match "Content-Type" header
         })
             .then(
               function (response) {

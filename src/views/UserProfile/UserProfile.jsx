@@ -74,7 +74,6 @@ class UserProfile extends Component {
   componentDidMount() {
     fetch(apiUrl + profilePath, {
       method: 'GET',
-      mode: 'no-cors',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'

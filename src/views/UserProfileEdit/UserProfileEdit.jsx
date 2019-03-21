@@ -74,7 +74,6 @@ class UserProfile extends Component {
   componentDidMount() {
     fetch(apiUrl + profilePath, {
       method: 'GET',
-      mode: 'no-cors',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'
@@ -109,11 +108,26 @@ class UserProfile extends Component {
     });
   }
 
+  logOut() {
+    fetch(apiUrl + '/logout', {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        'Content-Type': 'application/json'
+      })
+    }).catch(error => console.log(error));
+    this.performLogout(1);
+  }
+
+  performLogout(stat) {
+    localStorage.setItem(AUTHTOKEN_NAME, '');
+    this.props.history.push("/login");
+  }
+
   sendFormData()
   {
     fetch(apiUrl + profilePath, {
       method: 'POST',
-      mode: 'no-cors',
       headers: new Headers({
         'Authorization': this.state.authToken,
         'Content-Type': 'application/json'
@@ -313,6 +327,9 @@ class UserProfile extends Component {
                 {/* <p className={this.classes.description}>
                   Description
                 </p> */}
+                <Button color="warning" round onClick={()=>this.logOut()}>
+                  Log Out
+                </Button>
 
               </CardBody>
             </Card>
