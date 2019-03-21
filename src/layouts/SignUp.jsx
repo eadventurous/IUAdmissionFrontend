@@ -63,8 +63,13 @@ class SignUp extends React.Component {
         this.classes = props.classes;
         //console.log(this.classes);
         this.state = {
+            name: '',
+            phoneNumber: '',
             email: '',
             password: '',
+            program: '',
+            acknowledgment: '',
+            citizenship: ''
         };
         this.logIn = this.logIn.bind(this);
     }
@@ -83,8 +88,8 @@ class SignUp extends React.Component {
         })
             .then(
               function (response) {
-                if (response.status !== 200) {
-                  alert("Invalid input")
+                if (response.status != 200) {
+                  alert("Something went wrong!");
                   return;
                 }
                 // Examine the text in the response

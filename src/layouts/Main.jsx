@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
     
     if(this.props.location.pathname === '/dashboard')
     {
-      this.props.history.push('/dashboard/profile');
+      this.props.history.push('/dashboard/editprofile');
     }
 
     const { classes, ...rest } = this.props;

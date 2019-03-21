@@ -19,7 +19,7 @@ import MuiPhoneNumber from 'material-ui-phone-number';
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import { apiUrl, loginSuffixUrl, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
+import { apiUrl, profilePath, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
 import { FormControlLabel, TextField } from "@material-ui/core";
 
 const styles = theme => ({
@@ -72,7 +72,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount() {
-    fetch(apiUrl + loginSuffixUrl, {
+    fetch(apiUrl + profilePath, {
       method: 'GET',
       mode: 'no-cors',
       headers: new Headers({
@@ -81,12 +81,56 @@ class UserProfile extends Component {
       })
     })
       .then(response => response.json())
-      .then(json => console.log(json))
+      .then(json => this.fillData(json))
+      .catch(error => console.log(error));
+  }
+
+  fillData(data) {
+    this.state.email = data.email;
+    this.state.phone_number = data.phone_number;
+    this.state.first_name = data.first_name;
+    this.state.city = data.last_name;
+    this.state.country = data.country;
+    this.state.postal_code = data.postal_code;
+    this.state.skype_account = data.skype_account;
+    this.state.telegram_alias = data.telegram_alias;
+    this.state.about_me = data.about_me;
+  }
+
+  getUpdateForm() {
+    return ({
+      "fullName": this.state.first_name+" "+this.state.first_name,
+      "email": this.state.email,
+      "physicalAddress": this.state.country+" "+this.state.city+" "+this.state.postal_code,
+      "skype": this.state.skype_account,
+      "telegram": this.state.telegram_alias,
+      "additionalInfo": this.state.about_me,
+      "photoURL": "", 
+    });
+  }
+
+  sendFormData()
+  {
+    fetch(apiUrl + profilePath, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(this.getUpdateForm())
+    })
+      .then(response => response.json())
+      .then(json => this.fillData(json))
       .catch(error => console.log(error));
   }
 
   performUpdate() {
     console.log(this.state.email);
+  }
+
+  sendUpdate() {
+    
   }
 
   render() {
@@ -247,7 +291,7 @@ class UserProfile extends Component {
               </CardBody>
               <CardFooter>
                 <div className={this.classes.left}>
-                  <Button variant="outlined" color="success" onClick={() => this.performUpdate()} className={classes.button}>Update Profile</Button>
+                  <Button variant="outlined" color="success" onClick={() => this.sendFormData()} className={classes.button}>Update Profile</Button>
                   <Button variant="outlined" color="warning" className={classes.button}>Cancel</Button>
                 </div>
               </CardFooter>

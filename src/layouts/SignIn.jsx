@@ -77,7 +77,6 @@ class SignIn extends React.Component {
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       headers: {
         "Content-Type": "application/json",
-        // "Content-Type": "application/x-www-form-urlencoded",
       },
       body: JSON.stringify(data), // body data type must match "Content-Type" header
     })
