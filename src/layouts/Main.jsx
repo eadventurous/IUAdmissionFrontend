@@ -123,7 +123,11 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={this.routes}
+          routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
+          //   if (!elem.hidden) {
+          //     return (elem);
+          //   }
+          // })}
           logoText={"IU Admission"}
           logo={logo}
           image={this.state.image}

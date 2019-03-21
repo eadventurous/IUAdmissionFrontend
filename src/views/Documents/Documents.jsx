@@ -71,7 +71,7 @@ class UserProfile extends Component {
       <div>
         <Card>
           <CardHeader color="primary">
-            <h4 className={this.classes.cardTitleWhite}>ИНН</h4>
+            <h4 className={this.classes.cardTitleWhite}>Passport Scan</h4>
           </CardHeader>
           <CardBody>
             <DropzoneArea 
