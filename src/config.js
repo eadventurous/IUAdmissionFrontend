@@ -1,4 +1,4 @@
-export const apiUrl = "http://requestbin.fullcontact.com/1lxurnf1";//"https://iuadmissionsystem.azurewebsites.net";
+export const apiUrl = "http://10.241.1.36:50041";//"https://iuadmissionsystem.azurewebsites.net";
 export const profilePath = "/profile";
 export const authPath = "/auth";
 export const registerPath = "/auth/registration";

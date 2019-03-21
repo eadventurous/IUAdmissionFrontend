@@ -12,12 +12,17 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import FormControl from '@material-ui/core/FormControl';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+import MuiPhoneNumber from 'material-ui-phone-number';
+
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
+import { apiUrl, profilePath, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
+import { FormControlLabel, TextField } from "@material-ui/core";
 
-const styles = {
+const styles = theme => ({
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
     margin: "0",
@@ -33,8 +38,18 @@ const styles = {
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
     textDecoration: "none"
-  }
-};
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+});
 
 class UserProfile extends Component {
   constructor(props) {
@@ -42,23 +57,85 @@ class UserProfile extends Component {
     this.classes = props;
     this.state = {
       profileInfo: [],
-      authToken: localStorage.getItem(AUTHTOKEN_NAME)
+      authToken: localStorage.getItem(AUTHTOKEN_NAME),
+      email: '',
+      phone_number: '',
+      first_name: '',
+      last_name: '',
+      city: '',
+      country: '',
+      postal_code: '',
+      skype_account: '',
+      telegram_alias: '',
+      about_me: '',
     };
   }
 
   componentDidMount() {
     fetch(apiUrl + profilePath, {
       method: 'GET',
+      mode: 'no-cors',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'
       })
     })
       .then(response => response.json())
-      .then(json => console.log(json));
+      .then(json => this.fillData(json))
+      .catch(error => console.log(error));
+  }
+
+  fillData(data) {
+    this.state.email = data.email;
+    this.state.phone_number = data.phone_number;
+    this.state.first_name = data.first_name;
+    this.state.city = data.last_name;
+    this.state.country = data.country;
+    this.state.postal_code = data.postal_code;
+    this.state.skype_account = data.skype_account;
+    this.state.telegram_alias = data.telegram_alias;
+    this.state.about_me = data.about_me;
+  }
+
+  getUpdateForm() {
+    return ({
+      "fullName": this.state.first_name+" "+this.state.first_name,
+      "email": this.state.email,
+      "physicalAddress": this.state.country+" "+this.state.city+" "+this.state.postal_code,
+      "skype": this.state.skype_account,
+      "telegram": this.state.telegram_alias,
+      "additionalInfo": this.state.about_me,
+      "photoURL": "", 
+    });
+  }
+
+  sendFormData()
+  {
+    fetch(apiUrl + profilePath, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(this.getUpdateForm())
+    })
+      .then(response => response.json())
+      .then(json => this.fillData(json))
+      .catch(error => console.log(error));
+  }
+
+  performUpdate() {
+    console.log(this.state.email);
+  }
+
+  sendUpdate() {
+    
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
         <GridContainer>
@@ -71,96 +148,131 @@ class UserProfile extends Component {
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Email address"
-                      id="email-address"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                    <TextField
+                      required
+                      id="outlined-requied-full-width"
+                      label="Email"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.email}
+                      onChange={evt => this.setState({ email: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Mobile Phone"
-                      id="phone-number"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                    <TextField
+                      required
+                      id="outlined-required"
+                      label="Phone Number"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.phone_number}
+                      onChange={evt => this.setState({ phone_number: evt.target.value })}
                     />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="First Name"
+                    <TextField
+                      required
                       id="first-name"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="First Name"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.first_name}
+                      onChange={evt => this.setState({ first_name: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Last Name"
+                    <TextField
+                      required
                       id="last-name"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="Last Name"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.last_name}
+                      onChange={evt => this.setState({ last_name: evt.target.value })}
                     />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="City"
+                    <TextField
+                      required
                       id="city"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="City"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.city}
+                      onChange={evt => this.setState({ city: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Country"
+                    <TextField
+                      required
                       id="country"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="Country"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.coutry}
+                      onChange={evt => this.setState({ coutry: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Postal Code"
+                    <TextField
+                      required
                       id="postal-code"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="Postal Code"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.postal_code}
+                      onChange={evt => this.setState({ postal_code: evt.target.value })}
                     />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Skype Account"
+                    <TextField
+                      required
                       id="skype-account"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      label="Skype Account"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.skype_account}
+                      onChange={evt => this.setState({ skype_account: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Telegram Alias"
-                      id="telegram-alias"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                    <TextField
+                      required
+                      id="last-name"
+                      label="Telegram Alias"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      value={this.state.telegram_alias}
+                      onChange={evt => this.setState({ telegram_alias: evt.target.value })}
                     />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
-                    {/* <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel> */}
                     <CustomInput
                       labelText="About Me"
                       id="about-me"
@@ -171,14 +283,15 @@ class UserProfile extends Component {
                         multiline: true,
                         rows: 5
                       }}
+                      value={this.state.about_me}
+                      onChange={evt => this.setState({ about_me: evt.target.value })}
                     />
                   </GridItem>
                 </GridContainer>
               </CardBody>
               <CardFooter>
                 <div className={this.classes.left}>
-                  <Button color="success">Update Profile</Button>
-                  <Button color="warning">Cancel</Button>
+                  <Button variant="outlined" color="normal" className={classes.button}>Update Profile</Button>
                 </div>
               </CardFooter>
             </Card>
@@ -199,7 +312,7 @@ class UserProfile extends Component {
                 {/* <p className={this.classes.description}>
                   Description
                 </p> */}
-                
+
               </CardBody>
             </Card>
           </GridItem>

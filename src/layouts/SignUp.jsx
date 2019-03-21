@@ -65,7 +65,7 @@ class SignUp extends React.Component {
         this.state = {
             name: '',
             phoneNumber: '',
-            email: '',
+            login: '',
             password: '',
             program: '',
             acknowledgment: '',
@@ -75,21 +75,21 @@ class SignUp extends React.Component {
     }
 
     logIn(event) {
+        console.log(JSON.stringify(this.state));
         event.preventDefault();
         fetch(apiUrl + registerPath, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             mode: "no-cors", // no-cors, cors, *same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            //cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             headers: {
-                "Content-Type": "application/json",
-                // "Content-Type": "application/x-www-form-urlencoded",
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.state), // body data type must match "Content-Type" header
         })
             .then(
               function (response) {
                 if (response.status != 200) {
-                  alert("Something went wrong!");
+                  alert("Something went wrong!"+response.status);
                   return;
                 }
                 // Examine the text in the response
@@ -133,7 +133,7 @@ class SignUp extends React.Component {
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Email Address</InputLabel>
                             <Input id="email" name="email" autoComplete="email"
-                                value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
+                                value={this.state.login} onChange={evt => this.setState({ login: evt.target.value })} />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="password">Password</InputLabel>

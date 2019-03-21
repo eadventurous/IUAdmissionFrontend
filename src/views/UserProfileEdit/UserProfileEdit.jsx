@@ -292,7 +292,7 @@ class UserProfile extends Component {
               <CardFooter>
                 <div className={this.classes.left}>
                   <Button variant="outlined" color="success" onClick={() => this.sendFormData()} className={classes.button}>Update Profile</Button>
-                  <Button variant="outlined" color="warning" className={classes.button}>Cancel</Button>
+                  {/* <Button variant="outlined" color="warning" className={classes.button}>Cancel</Button> */}
                 </div>
               </CardFooter>
             </Card>
