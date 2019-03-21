@@ -1,5 +1,5 @@
-export const apiUrl = "http://10.240.23.39:56053";//"https://iuadmissionsystem.azurewebsites.net";
-export const profilePath = "/profile";
+export const apiUrl = "http://10.241.1.36:50041";//"https://iuadmissionsystem.azurewebsites.net";
+export const profilePath = "/dashboard/profile";
 export const authPath = "/auth";
 export const registerPath = "/auth/registration";
 

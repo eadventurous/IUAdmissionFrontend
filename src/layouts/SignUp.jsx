@@ -74,6 +74,18 @@ class SignUp extends React.Component {
         this.logIn = this.logIn.bind(this);
     }
 
+    handleMove(response) {
+        if (response.status != 200) {
+            alert("Something went wrong!" + response.status);
+            return;
+        }
+        response.json().then((data) => {
+            console.log(data);
+            this.props.dispatch({ type: 'UPDATE', token: data.token });
+            this.props.history.push('/dashboard');
+        });
+    }
+
     logIn(event) {
         event.preventDefault();
         fetch(apiUrl + registerPath, {
@@ -84,25 +96,25 @@ class SignUp extends React.Component {
                 "Content-Type": "application/json",
             }),
             body: JSON.stringify(this.state),
-             // body data type must match "Content-Type" header
+            // body data type must match "Content-Type" header
         })
-            .then(
-              function (response) {
-                if (response.status != 200) {
-                  alert("Something went wrong!"+response.status);
-                  return;
-                }
-                // Examine the text in the response
-                response.json().then(function (data) {
-                  console.log(data);
-                  this.props.dispatch({type: 'UPDATE', token: data.token});
-                  this.props.history.push('/dashboard');
-                });
-              }
-            )
+            .then(response => this.handleMove(response))
             .catch(function (err) {
-              console.log('Fetch Error :-S', err);
+                console.log('Fetch Error :-S', err);
             });
+
+        // function (response) {
+        //     if (response.status != 200) {
+        //       alert("Something went wrong!"+response.status);
+        //       return;
+        //     }
+        //     // Examine the text in the response
+        //     response.json().then(function (data) {
+        //       console.log(data);
+        //       this.props.dispatch({type: 'UPDATE', token: data.token});
+        //       this.props.history.push('/dashboard');
+        //     });
+        //   }
 
         //Debug code
         /*this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
@@ -159,8 +171,8 @@ class SignUp extends React.Component {
                         <FormControl margin="normal" required fullWidth>
                             <CountryDropdown
                                 value={this.state.citizenship}
-                                onChange={(val) => this.setState({citizenship: val})}
-                                showDefaultOption={false}/>
+                                onChange={(val) => this.setState({ citizenship: val })}
+                                showDefaultOption={false} />
                         </FormControl>
                         <Button
                             type="submit"

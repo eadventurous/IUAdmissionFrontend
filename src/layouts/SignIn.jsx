@@ -61,7 +61,7 @@ class SignIn extends React.Component {
     this.classes = props.classes;
     //console.log(this.classes);
     this.state = {
-      email: '',
+      login: '',
       password: ''
     };
     this.logIn = this.logIn.bind(this);
@@ -73,7 +73,7 @@ class SignIn extends React.Component {
 
     fetch(apiUrl + authPath, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "no-cors", // no-cors, cors, *same-origin
+      // mode: "no-cors", // no-cors, cors, *same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       headers: {
         "Content-Type": "application/json",
@@ -81,13 +81,13 @@ class SignIn extends React.Component {
       body: JSON.stringify(data), // body data type must match "Content-Type" header
     })
       .then(
-        function (response) {
+        (response) => {
           if (response.status !== 200) {
             alert("Invalid login or password")
             return;
           }
           // Examine the text in the response
-          response.json().then(function (data) {
+          response.json().then((data) => {
             console.log(data);
             this.props.dispatch({ type: 'UPDATE', token: data.token });
             this.props.history.push('/dashboard');
@@ -118,7 +118,7 @@ class SignIn extends React.Component {
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
               <Input id="email" name="email" autoComplete="email" autoFocus
-                value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
+                value={this.state.login} onChange={evt => this.setState({ login: evt.target.value })} />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
