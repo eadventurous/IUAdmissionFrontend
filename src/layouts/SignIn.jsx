@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {apiUrl, loginSuffixUrl, USERTYPE_NAME, AUTHTOKEN_NAME} from '../config.js'
+import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, authPath } from '../config.js'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const styles = theme => ({
@@ -46,6 +47,10 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  bottomlink: {
+    marginTop: theme.spacing.unit,
+    fontSize: 'small',
+  }
 });
 
 
@@ -64,7 +69,18 @@ class SignIn extends React.Component {
 
   logIn(event) {
     event.preventDefault();
-    fetch(apiUrl + "/auth", {login: this.state.login, password: this.state.password})
+    const data = { login: this.state.login, password: this.state.password };
+
+    fetch(apiUrl + authPath, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "no-cors", // no-cors, cors, *same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      headers: {
+        "Content-Type": "application/json",
+        // "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    })
       .then(
         function (response) {
           if (response.status !== 200) {
@@ -74,7 +90,7 @@ class SignIn extends React.Component {
           // Examine the text in the response
           response.json().then(function (data) {
             console.log(data);
-            this.props.dispatch({type: 'UPDATE', token: data.token});
+            this.props.dispatch({ type: 'UPDATE', token: data.token });
             this.props.history.push('/dashboard');
           });
         }
@@ -124,6 +140,8 @@ class SignIn extends React.Component {
               Sign in
           </Button>
           </form>
+          <Link className={this.classes.bottomlink} to="/">Forgot password?</Link>
+          <Link className={this.classes.bottomlink} to="/signup">No account yet?</Link>
         </Paper>
       </main>
     );
