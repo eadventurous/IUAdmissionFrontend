@@ -14,6 +14,7 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 import UserProfileEdit from "views/UserProfileEdit/UserProfileEdit.jsx";
 import Documents from "views/Documents/Documents.jsx";
 import TableList from "views/TableList/TableList.jsx";
+import InterviewList from "views/Interviewer/InterviewList.jsx";
 // import Typography from "views/Typography/Typography.jsx";
 // import Icons from "views/Icons/Icons.jsx";
 // import Maps from "views/Maps/Maps.jsx";
@@ -68,6 +69,13 @@ export const interviewerRoutes = [
     name: "User Profile",
     icon: Person,
     component: UserProfile,
+    layout: "/dashboard"
+  },
+  {
+    path: "/interview-list",
+    name: "Interview List",
+    icon: Person,
+    component: InterviewList,
     layout: "/dashboard"
   },
 ]
