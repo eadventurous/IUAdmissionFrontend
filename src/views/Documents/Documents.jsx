@@ -6,38 +6,53 @@ import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardAvatar from "components/Card/CardAvatar.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import {DropzoneArea} from 'material-ui-dropzone'
+// import Button from "components/CustomButtons/Button.jsx";
+// import Card from "components/Card/Card.jsx";
+// import CardHeader from "components/Card/CardHeader.jsx";
+// import CardAvatar from "components/Card/CardAvatar.jsx";
+// import CardBody from "components/Card/CardBody.jsx";
+// import CardFooter from "components/Card/CardFooter.jsx";
+import { DropzoneArea } from 'material-ui-dropzone'
+
+import PropTypes from 'prop-types';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import avatar from "assets/img/faces/marc.jpg";
 
 import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
+const styles = theme => ({
+  card: {
+    minWidth: 275,
   },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+  actions: {
+    display: "flex",
+    justifyContent: "space-between"
+  },
+});
 
-class UserProfile extends Component {
+class DocumentUpload extends Component {
   constructor(props) {
     super();
     this.classes = props;
@@ -47,8 +62,8 @@ class UserProfile extends Component {
       files: []
     };
   }
-  
-  handleFileChange(files){
+
+  handleFileChange(files) {
     this.setState({
       files: files
     });
@@ -67,32 +82,53 @@ class UserProfile extends Component {
   }
 
   render() {
+    const { classes } = this.classes;
     return (
       <div>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={this.classes.cardTitleWhite}>Passport Scan</h4>
-          </CardHeader>
-          <CardBody>
-            <DropzoneArea 
-            onChange={this.handleFileChange.bind(this)}
-            />
-          </CardBody>
-          <CardFooter>
-            <div className={this.classes.left}>
-              {/* <Button color="success">Update Profile</Button>
-              <Button color="warning">Cancel</Button> */}
-            </div>
-          </CardFooter>
-        </Card>
+        <GridContainer>
+          <GridItem xs={12} sm={6} md={3}>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  required
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  Passport Scan
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  description
+                </Typography>
+              </CardContent>
+              <CardActions className={classes.actions}>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  style={{ display: 'none' }}
+                  id="outlined-button-file"
+                  multiple
+                  type="file"
+                  />
+                <label htmlFor="outlined-button-file">
+                  <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
+                    Upload
+                  </Button>
+                </label>
+              </CardActions>
+            </Card>
+          </GridItem>
+        </GridContainer>
       </div>
     );
   }
 }
+
+DocumentUpload.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 // function UserProfile(props) {
 //   const { classes } = props;
 
 // }
 
-export default withStyles(styles)(UserProfile);
+export default withStyles(styles)(DocumentUpload);

@@ -91,7 +91,6 @@ class SignUp extends React.Component {
         fetch(apiUrl + registerPath, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             // mode: "no-cors", // no-cors, cors, *same-origin
-            //cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             headers: new Headers({
                 "Content-Type": "application/json",
             }),
