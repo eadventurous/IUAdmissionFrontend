@@ -23,6 +23,7 @@ You can find the Github Repo here.
 
 ## Table of Contents
 
+* [Setup](#setup)
 * [Versions](#versions)
 * [Demo](#demo)
 * [Quick Start](#quick-start)
@@ -35,6 +36,16 @@ You can find the Github Repo here.
 * [Licensing](#licensing)
 * [Useful Links](#useful-links)
 
+## Setup
+Install all dependencies
+```
+npm install
+```
+
+Start the server
+```
+npm start
+```
 
 ## Versions
 
