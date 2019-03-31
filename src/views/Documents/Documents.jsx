@@ -22,7 +22,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import avatar from "assets/img/faces/marc.jpg";
-
+//Hello
 import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
 
 const styles = theme => ({
