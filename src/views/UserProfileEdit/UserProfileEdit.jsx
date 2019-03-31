@@ -72,56 +72,69 @@ class UserProfile extends Component {
   }
 
   componentDidMount() {
-    fetch(apiUrl + profilePath, {
-      method: 'GET',
+    fetch(apiUrl + "/dashboard/profileget", {
+      method: 'POST',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'
       })
     })
-      .then(response => response.json())
-      .then(json => this.fillData(json))
+      .then(response => this.fillData(response.json()))
       .catch(error => console.log(error));
   }
 
   fillData(data) {
-    this.state.email = data.email;
-    this.state.phone_number = data.phone_number;
-    this.state.first_name = data.first_name;
-    this.state.city = data.last_name;
-    this.state.country = data.country;
-    this.state.postal_code = data.postal_code;
-    this.state.skype_account = data.skype_account;
-    this.state.telegram_alias = data.telegram_alias;
-    this.state.about_me = data.about_me;
+    console.log("DATA", data);
+    // this.state.email = data.Email;
+    // this.state.phone_number = data.Phone;
+    // this.state.first_name = data.Name;
+    // this.state.city = data.last_name;
+    // this.state.country = data.Address;
+    // this.state.postal_code = data.postal_code;
+    // this.state.skype_account = data.Skype;
+    // this.state.telegram_alias = data.Telegram;
+    // this.state.about_me = data.About;
   }
 
   getUpdateForm() {
     return ({
-      "fullName": this.state.first_name+" "+this.state.first_name,
-      "email": this.state.email,
-      "physicalAddress": this.state.country+" "+this.state.city+" "+this.state.postal_code,
-      "skype": this.state.skype_account,
-      "telegram": this.state.telegram_alias,
-      "additionalInfo": this.state.about_me,
-      "photoURL": "", 
+      "Name": this.state.first_name+" "+this.state.first_name,
+      "Email": this.state.email,
+      "Phone": this.state.phone_number,
+      "Address": this.state.country+" "+this.state.city+" "+this.state.postal_code,
+      "Skype": this.state.skype_account,
+      "Telegram": this.state.telegram_alias,
+      "About": this.state.about_me,
+      "photoURL": "",
     });
+  }
+
+  logOut() {
+    fetch(apiUrl + '/auth/logout', {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        'Content-Type': 'application/json'
+      })
+    }).catch(error => console.log(error));
+    this.performLogout(1);
+  }
+
+  performLogout(stat) {
+    localStorage.setItem(AUTHTOKEN_NAME, '');
+    this.props.history.push("/login");
   }
 
   sendFormData()
   {
     fetch(apiUrl + profilePath, {
       method: 'POST',
-      mode: 'no-cors',
       headers: new Headers({
         'Authorization': this.state.authToken,
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(this.getUpdateForm())
     })
-      .then(response => response.json())
-      .then(json => this.fillData(json))
-      .catch(error => console.log(error));
   }
 
   performUpdate() {
@@ -272,16 +285,16 @@ class UserProfile extends Component {
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
+                    <TextField
                       labelText="About Me"
                       id="about-me"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 5
-                      }}
+                      label="About Me"
+                      className={classes.textField}
+                      fullWidth
+                      margin="normal"
+                      variant="outlined"
+                      multiline
+                      rows="5"
                       value={this.state.about_me}
                       onChange={evt => this.setState({ about_me: evt.target.value })}
                     />
@@ -290,7 +303,8 @@ class UserProfile extends Component {
               </CardBody>
               <CardFooter>
                 <div className={this.classes.left}>
-                  <Button variant="outlined" color="normal" className={classes.button}>Update Profile</Button>
+                  <Button variant="outlined" color="success" onClick={() => this.sendFormData()} className={classes.button}>Update Profile</Button>
+                  {/* <Button variant="outlined" color="warning" className={classes.button}>Cancel</Button> */}
                 </div>
               </CardFooter>
             </Card>
@@ -311,6 +325,9 @@ class UserProfile extends Component {
                 {/* <p className={this.classes.description}>
                   Description
                 </p> */}
+                <Button color="warning" round onClick={()=>this.logOut()}>
+                  Log Out
+                </Button>
 
               </CardBody>
             </Card>
