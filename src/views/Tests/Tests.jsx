@@ -61,7 +61,7 @@ const styles = theme => ({
   },
 });
 
-class DocumentUpload extends Component {
+class TestsSelector extends Component {
   constructor(props) {
     super();
     this.classes = props;
@@ -70,12 +70,6 @@ class DocumentUpload extends Component {
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
       files: []
     };
-  }
-
-  handleFileChange(files) {
-    this.setState({
-      files: files
-    });
   }
 
   componentDidMount() {
@@ -107,19 +101,9 @@ class DocumentUpload extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-            <input
-              accept="image/*"
-              className={classes.input}
-              style={{ display: 'none' }}
-              id="outlined-button-file"
-              multiple
-              type="file"
-              />
-            <label htmlFor="outlined-button-file">
               <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
-                Upload
+                Open
               </Button>
-            </label>
           </CardActions>
         </Card>
       </div>
@@ -130,23 +114,17 @@ class DocumentUpload extends Component {
     return (
       <Grid container className={this.classes.root} spacing={24}>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Passport Scan", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Math", "Basic math tasks, limit: 1 hour.")}
         </Grid>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Transcript of Records from High School", "Should be without visible image defects, all sides/all pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Programming", "Tasks for alforithm building, limit: 2 hours.")}
         </Grid>
       </Grid>
     );
   }
 }
 
-DocumentUpload.propTypes = {
+TestsSelector.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -155,4 +133,4 @@ DocumentUpload.propTypes = {
 
 // }
 
-export default withStyles(styles)(DocumentUpload);
+export default withStyles(styles)(TestsSelector);

@@ -96,9 +96,6 @@ class DocumentUpload extends Component {
       <div>
         <Card className={classes.card}>
           <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              required
-            </Typography>
             <Typography variant="h5" component="h2">
               {name}
             </Typography>
@@ -107,17 +104,26 @@ class DocumentUpload extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-            <input
-              accept="image/*"
-              className={classes.input}
-              style={{ display: 'none' }}
-              id="outlined-button-file"
-              multiple
-              type="file"
-              />
             <label htmlFor="outlined-button-file">
               <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
-                Upload
+                View
+              </Button>
+            </label>
+          </CardActions>
+        </Card>
+      </div>
+    );
+  }
+
+  getAddTile() {
+    const {classes} = this.classes;
+    return (
+      <div>
+        <Card>
+          <CardActions className={classes.actions}>
+            <label htmlFor="outlined-button-file">
+              <Button style={{float: 'right'}} component="span" className={classes.button}>
+                +
               </Button>
             </label>
           </CardActions>
@@ -130,16 +136,16 @@ class DocumentUpload extends Component {
     return (
       <Grid container className={this.classes.root} spacing={24}>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Passport Scan", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Admins","")}
         </Grid>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Transcript of Records from High School", "Should be without visible image defects, all sides/all pages.")}
+          {this.getDocumentTile("Interviewers", "")}
         </Grid>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Managers", "")}
         </Grid>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
+          {this.getAddTile()}
         </Grid>
       </Grid>
     );

@@ -13,6 +13,9 @@ import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import UserProfileEdit from "views/UserProfileEdit/UserProfileEdit.jsx";
 import Documents from "views/Documents/Documents.jsx";
+import TestsSelector from "views/Tests/Tests.jsx";
+import UserGroups from "views/UserGroups/UserGroups.jsx"
+import Users from "views/Users/Users.jsx"
 import TableList from "views/TableList/TableList.jsx";
 // import Typography from "views/Typography/Typography.jsx";
 // import Icons from "views/Icons/Icons.jsx";
@@ -47,17 +50,31 @@ export const candidateRoutes = [
     path: "/tests",
     name: "Tests",
     icon: Tests,
-    component: UserProfile,
+    component: TestsSelector,
     layout: "/dashboard"
   }
 ]
 
 export const adminRoutes = [
   {
-    path: "/profile",
+    path: "/editprofile",
     name: "User Profile",
     icon: Person,
     component: UserProfile,
+    layout: "/dashboard"
+  },
+  {
+    path: "/users",
+    name: "Users",
+    icon: Person,
+    component: Users,
+    layout: "/dashboard"
+  },
+  {
+    path: "/usergroups",
+    name: "User Groups",
+    icon: Person,
+    component: UserGroups,
     layout: "/dashboard"
   },
 ]
