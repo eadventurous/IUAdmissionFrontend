@@ -101,7 +101,7 @@ class TestsSelector extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-              <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
+              <Button variant="outlined" onClick={()=>{this.props.history.push("/test")}} component="span" className={classes.button}>
                 Open
               </Button>
           </CardActions>

@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
       fixedClasses: "dropdown show",
       mobileOpen: false,
       redirecting: false,
-      userType: localStorage.getItem(USERTYPE_NAME)
+      userType: "candidate"//localStorage.getItem(USERTYPE_NAME)
     };
     switch(this.state.userType) {
       case "candidate":
