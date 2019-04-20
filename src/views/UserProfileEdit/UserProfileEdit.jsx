@@ -15,11 +15,12 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import FormControl from '@material-ui/core/FormControl';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MuiPhoneNumber from 'material-ui-phone-number';
+import UnknownPersonPhoto from 'assets/img/unknown_person.png'
 
 
 import avatar from "assets/img/faces/marc.jpg";
 
-import { apiUrl, profilePath, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
+import { apiUrl, profilePath, fileStoragePath, USERTYPE_NAME, AUTHTOKEN_NAME } from '../../config.js'
 import { FormControlLabel, TextField } from "@material-ui/core";
 
 const styles = theme => ({
@@ -71,7 +72,7 @@ class UserProfile extends Component {
       skype_account: '',
       telegram_alias: '',
       about_me: '',
-      file: '',
+      photo: UnknownPersonPhoto,
     };
   }
 
@@ -87,7 +88,7 @@ class UserProfile extends Component {
       // .then(data => console.log(data))
       .then(data => this.setState({
         email: data.email,
-        phone_number: data.phone,
+        phone_number: data.phone?data.phone:"",
         first_name: data.firstName,
         last_name: data.lastName,
         city: data.city,
@@ -97,6 +98,7 @@ class UserProfile extends Component {
         telegram_alias: data.telegram,
         about_me: data.about,
       }))
+      .then(() => this.downloadProfilePhoto(this, 'profilePhoto', ))
       .catch(error => console.log(error));
       // console.log(this.state);
   }
@@ -148,7 +150,7 @@ class UserProfile extends Component {
     console.log(this.state.email);
   }
 
-  handleFile(file)
+  updateProfilePhoto(file)
   {
     var reader = new FileReader();
     reader.fileName = file.name;
@@ -157,11 +159,16 @@ class UserProfile extends Component {
       var arrayBuffer = this.result,
       array = new Uint8Array(arrayBuffer),
       binaryString = String.fromCharCode.apply(null, array);
-      // console.log(binaryString);
-      console.log(event.target.fileName)
-      self.fileAvatarSet(self.bytesToBlob(binaryString));
+      self.uploadFile(self, 'profilePhoto', event.target.fileName, binaryString);
+      // console.log(event.target.fileName)
+      // self.fileAvatarSet(self.bytesToBlob(binaryString));
     }
     reader.readAsArrayBuffer(file);
+  }
+
+  setPhoto(self, str)
+  {
+    self.fileAvatarSet(self.bytesToBlob(str));
   }
 
   bytesToBlob(str)
@@ -179,9 +186,38 @@ class UserProfile extends Component {
     var fr = new FileReader();
     var self = this;
     fr.onload = function () {
-        self.refs.Img1.src = fr.result;
+        self.state.photo = fr.result;
     }
     fr.readAsDataURL(file);
+  }
+
+  downloadProfilePhoto(self, type)
+  {
+    var url = new URL(apiUrl + fileStoragePath);
+    var params = {type: type};
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    console.log(url);
+    fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': self.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+    }).then(response => response.json())
+      .then(json => self.setPhoto(self, json.bytes));
+  }
+
+  uploadFile(self, type, filename, bytes)
+  {
+    console.log(bytes);
+    fetch(apiUrl + fileStoragePath, {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': self.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({"Data": {Type: type, FileName: filename}, Bytes: bytes})
+    })
   }
 
   render() {
@@ -347,7 +383,7 @@ class UserProfile extends Component {
             <Card profile>
               <CardAvatar  profile>
                   <a onClick={e => e.preventDefault()}>
-                    <img ref="Img1" src={this.state.file} alt="..." />
+                    <img ref="Img1" src={this.state.photo} alt="..." />
                   </a>
               </CardAvatar>
               <CardBody profile>
@@ -357,7 +393,7 @@ class UserProfile extends Component {
                   style={{ display: 'none' }}
                   id="outlined-button-file"
                   multiple
-                  onChange={()=>this.handleFile(this.refs.File1.files[0])}//this.setState({file: file})}}
+                  onChange={()=>this.updateProfilePhoto(this.refs.File1.files[0])}//this.setState({file: file})}}
                   type="file"
                   ref="File1"
                   />

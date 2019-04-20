@@ -9,7 +9,6 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Navbar from "components/Navbars/Navbar.jsx";
-import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import {candidateRoutes, adminRoutes, interviewerRoutes, managerRoutes} from "routes.js";
@@ -121,7 +120,7 @@ class Dashboard extends React.Component {
 
     const { classes, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
+      <div style={{height: '100%'}} className={classes.wrapper}>
         <Sidebar
           routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
           //   if (!elem.hidden) {
@@ -142,7 +141,6 @@ class Dashboard extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and container classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
               <div className={classes.container}>{this.switchRoutes()}</div>
@@ -150,7 +148,6 @@ class Dashboard extends React.Component {
           ) : (
             <div className={classes.map}>{this.switchRoutes()}</div>
           )}
-          {/* {this.getRoute() ? <Footer /> : null} */}
         </div>
       </div>
     );
