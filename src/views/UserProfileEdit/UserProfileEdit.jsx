@@ -49,6 +49,9 @@ const styles = theme => ({
   input: {
     display: 'none',
   },
+  fillBackground: {
+    'background-color': '#FFFFFF',
+  },
 });
 
 class UserProfile extends Component {
@@ -145,8 +148,40 @@ class UserProfile extends Component {
     console.log(this.state.email);
   }
 
-  sendUpdate() {
-    
+  handleFile(file)
+  {
+    var reader = new FileReader();
+    reader.fileName = file.name;
+    var self = this;
+    reader.onload = function(event) {
+      var arrayBuffer = this.result,
+      array = new Uint8Array(arrayBuffer),
+      binaryString = String.fromCharCode.apply(null, array);
+      // console.log(binaryString);
+      console.log(event.target.fileName)
+      self.fileAvatarSet(self.bytesToBlob(binaryString));
+    }
+    reader.readAsArrayBuffer(file);
+  }
+
+  bytesToBlob(str)
+  {
+    var buf = new ArrayBuffer(str.length);
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return new Blob([buf]);
+  }
+
+  fileAvatarSet(file)
+  {
+    var fr = new FileReader();
+    var self = this;
+    fr.onload = function () {
+        self.refs.Img1.src = fr.result;
+    }
+    fr.readAsDataURL(file);
   }
 
   render() {
@@ -310,10 +345,10 @@ class UserProfile extends Component {
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <Card profile>
-              <CardAvatar profile>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  <img src={avatar} alt="..." />
-                </a>
+              <CardAvatar  profile>
+                  <a onClick={e => e.preventDefault()}>
+                    <img ref="Img1" src={this.state.file} alt="..." />
+                  </a>
               </CardAvatar>
               <CardBody profile>
                 <input
@@ -322,14 +357,14 @@ class UserProfile extends Component {
                   style={{ display: 'none' }}
                   id="outlined-button-file"
                   multiple
-                  onChange={file=>{this.setState({file: file})}}
+                  onChange={()=>this.handleFile(this.refs.File1.files[0])}//this.setState({file: file})}}
                   type="file"
+                  ref="File1"
                   />
                 <label htmlFor="outlined-button-file">
                   <Button color="primary" variant="outlined" component="span" className={classes.button} round>
                     Change Photo
                   </Button>
-                  <img src="Hello"/>
                 </label>
                 <h5 className={this.classes.cardCategory}> Registered</h5>
                 <h4 className={this.classes.cardTitle}>Not Enrolled Yet</h4>
