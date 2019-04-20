@@ -3,9 +3,6 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
 // import Button from "components/CustomButtons/Button.jsx";
 // import Card from "components/Card/Card.jsx";
 // import CardHeader from "components/Card/CardHeader.jsx";
@@ -14,6 +11,7 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 // import CardFooter from "components/Card/CardFooter.jsx";
 import { DropzoneArea } from 'material-ui-dropzone'
 
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -26,6 +24,9 @@ import avatar from "assets/img/faces/marc.jpg";
 import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
   card: {
     minWidth: 275,
   },
@@ -42,13 +43,14 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+    justifyContent: "space-between"
   },
   input: {
     display: 'none',
   },
   actions: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
 });
 
@@ -59,13 +61,15 @@ class DocumentUpload extends Component {
     this.state = {
       profileInfo: [],
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
-      files: []
+      files: [],
+      passportScan1: "Hello Johnny!",
+      passportScan2: null,
     };
   }
 
   handleFileChange(files) {
     this.setState({
-      files: files
+      files: files,
     });
   }
 
@@ -80,44 +84,72 @@ class DocumentUpload extends Component {
       .then(response => response.json())
       .then(json => console.log(json));
   }
-
-  render() {
+  makeEntry(top, title, description, reference) {
     const { classes } = this.classes;
     return (
       <div>
-        <GridContainer>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  required
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  Passport Scan
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                  description
-                </Typography>
-              </CardContent>
-              <CardActions className={classes.actions}>
-                <input
-                  accept="image/*"
-                  className={classes.input}
-                  style={{ display: 'none' }}
-                  id="outlined-button-file"
-                  multiple
-                  type="file"
-                  />
-                <label htmlFor="outlined-button-file">
-                  <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
-                    Upload
-                  </Button>
-                </label>
-              </CardActions>
-            </Card>
-          </GridItem>
-        </GridContainer>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              {top}
+            </Typography>
+            <Typography variant="h5" component="h2">
+              {title}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              {description}
+            </Typography>
+          </CardContent>
+          <CardActions className={classes.actions}>
+            <input
+              accept="image/*"
+              className={classes.input}
+              style={{ display: 'none' }}
+              id="outlined-button-file"
+              multiple
+              onChange={()=>{this.setState({[reference]: "Hi"})}}
+              type="file"
+              />
+            <label htmlFor="outlined-button-file">
+              <Button variant="outlined" component="span" className={classes.button}>
+                Upload
+              </Button>
+            </label>
+          </CardActions>
+        </Card>
       </div>
+      );
+  }
+
+  render() {
+    return (
+      <Grid container className={this.classes.root} spacing={16}>
+          <Grid item xs>
+            {this.makeEntry(this.state.passportScan1, 'Passport Scan', 'description', 'passportScan1')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+          <Grid item xs>
+            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+          </Grid>
+      </Grid>
+      
     );
   }
 }
