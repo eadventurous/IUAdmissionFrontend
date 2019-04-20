@@ -68,45 +68,34 @@ class UserProfile extends Component {
       skype_account: '',
       telegram_alias: '',
       about_me: '',
+      file: '',
     };
   }
 
   componentDidMount() {
-    fetch(apiUrl + "/dashboard/profileget", {
-      method: 'POST',
+    fetch(apiUrl + profilePath, {
+      method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,
-        // 'Content-Type': 'application/json'
+        //'Content-Type': 'application/json'
       })
     })
-      .then(response => this.fillData(response.json()))
+      .then(response => response.json())
+      // .then(data => console.log(data))
+      .then(data => this.setState({
+        email: data.email,
+        phone_number: data.phone,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        city: data.city,
+        country: data.country,
+        postal_code: data.postCode,
+        skype_account: data.skype,
+        telegram_alias: data.telegram,
+        about_me: data.about,
+      }))
       .catch(error => console.log(error));
-  }
-
-  fillData(data) {
-    console.log("DATA", data);
-    // this.state.email = data.Email;
-    // this.state.phone_number = data.Phone;
-    // this.state.first_name = data.Name;
-    // this.state.city = data.last_name;
-    // this.state.country = data.Address;
-    // this.state.postal_code = data.postal_code;
-    // this.state.skype_account = data.Skype;
-    // this.state.telegram_alias = data.Telegram;
-    // this.state.about_me = data.About;
-  }
-
-  getUpdateForm() {
-    return ({
-      "Name": this.state.first_name+" "+this.state.first_name,
-      "Email": this.state.email,
-      "Phone": this.state.phone_number,
-      "Address": this.state.country+" "+this.state.city+" "+this.state.postal_code,
-      "Skype": this.state.skype_account,
-      "Telegram": this.state.telegram_alias,
-      "About": this.state.about_me,
-      "photoURL": "",
-    });
+      // console.log(this.state);
   }
 
   logOut() {
@@ -137,6 +126,21 @@ class UserProfile extends Component {
     })
   }
 
+  getUpdateForm() {
+    return ({
+      "FirstName": this.state.first_name,
+      "LastName": this.state.last_name,
+      "Email": this.state.email,
+      "Phone": this.state.phone_number,
+      "Country": this.state.country,
+      "City": this.state.city,
+      "PostCode": this.state.postal_code,
+      "Skype": this.state.skype_account,
+      "Telegram": this.state.telegram_alias,
+      "About": this.state.about_me,
+    });
+  }
+
   performUpdate() {
     console.log(this.state.email);
   }
@@ -162,7 +166,9 @@ class UserProfile extends Component {
                   <GridItem xs={12} sm={12} md={6}>
                     <TextField
                       required
-                      id="outlined-requied-full-width"
+                      type="email"
+                      autoComplete="email"
+                      id="outlined-email-input"
                       label="Email"
                       className={classes.textField}
                       fullWidth
@@ -173,17 +179,10 @@ class UserProfile extends Component {
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
-                    <TextField
-                      required
-                      id="outlined-required"
-                      label="Phone Number"
-                      className={classes.textField}
-                      fullWidth
-                      margin="normal"
-                      variant="outlined"
-                      value={this.state.phone_number}
-                      onChange={evt => this.setState({ phone_number: evt.target.value })}
-                    />
+                    <FormControl margin="normal" required fullWidth className={classes.textField}>
+                        <MuiPhoneNumber defaultCountry={'ru'} variant="outlined"
+                            value={this.state.phone_number} onChange={value => this.setState({ phone_number: value })} />
+                    </FormControl>
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
@@ -237,8 +236,8 @@ class UserProfile extends Component {
                       fullWidth
                       margin="normal"
                       variant="outlined"
-                      value={this.state.coutry}
-                      onChange={evt => this.setState({ coutry: evt.target.value })}
+                      value={this.state.country}
+                      onChange={evt => this.setState({ country: evt.target.value })}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
@@ -317,9 +316,21 @@ class UserProfile extends Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <Button color="primary" round>
-                  Change Photo
-                </Button>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  style={{ display: 'none' }}
+                  id="outlined-button-file"
+                  multiple
+                  onChange={file=>{this.setState({file: file})}}
+                  type="file"
+                  />
+                <label htmlFor="outlined-button-file">
+                  <Button color="primary" variant="outlined" component="span" className={classes.button} round>
+                    Change Photo
+                  </Button>
+                  <img src="Hello"/>
+                </label>
                 <h5 className={this.classes.cardCategory}> Registered</h5>
                 <h4 className={this.classes.cardTitle}>Not Enrolled Yet</h4>
                 {/* <p className={this.classes.description}>
