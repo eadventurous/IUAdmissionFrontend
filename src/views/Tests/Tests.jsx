@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
 // core components
+import GridItem from "components/Grid/GridItem.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import CustomInput from "components/CustomInput/CustomInput.jsx";
 // import Button from "components/CustomButtons/Button.jsx";
 // import Card from "components/Card/Card.jsx";
 // import CardHeader from "components/Card/CardHeader.jsx";
@@ -11,22 +14,19 @@ import InputLabel from "@material-ui/core/InputLabel";
 // import CardFooter from "components/Card/CardFooter.jsx";
 import { DropzoneArea } from 'material-ui-dropzone'
 
-import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid'
 
 import avatar from "assets/img/faces/marc.jpg";
 //Hello
 import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
   card: {
     minWidth: 275,
   },
@@ -43,14 +43,13 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
-    justifyContent: "space-between"
   },
   input: {
     display: 'none',
   },
   actions: {
-    display: 'flex',
-    justifyContent: 'flex-end'
+    display: "flex",
+    justifyContent: "space-between"
   },
   root: {
     flexGrow: 1,
@@ -62,23 +61,15 @@ const styles = theme => ({
   },
 });
 
-class DocumentUpload extends Component {
+class TestsSelector extends Component {
   constructor(props) {
     super();
     this.classes = props;
     this.state = {
       profileInfo: [],
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
-      files: [],
-      passportScan1: "Hello Johnny!",
-      passportScan2: null,
+      files: []
     };
-  }
-
-  handleFileChange(files) {
-    this.setState({
-      files: files,
-    });
   }
 
   componentDidMount() {
@@ -92,72 +83,30 @@ class DocumentUpload extends Component {
       .then(response => response.json())
       .then(json => console.log(json));
   }
-  makeEntry(top, title, description, reference) {
-    const { classes } = this.classes;
+
+  getDocumentTile(name, description) {
+    const {classes} = this.classes;
     return (
       <div>
         <Card className={classes.card}>
           <CardContent>
             <Typography className={classes.title} color="textSecondary" gutterBottom>
-              {top}
+              required
             </Typography>
             <Typography variant="h5" component="h2">
-              {title}
+              {name}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               {description}
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-            <input
-              accept="image/*"
-              className={classes.input}
-              style={{ display: 'none' }}
-              id="outlined-button-file"
-              multiple
-              onChange={()=>{this.setState({[reference]: "Hi"})}}
-              type="file"
-              />
-            <label htmlFor="outlined-button-file">
-              <Button variant="outlined" component="span" className={classes.button}>
-                Upload
+              <Button variant="outlined" onClick={()=>{this.props.history.push("/test")}} component="span" className={classes.button}>
+                Open
               </Button>
-            </label>
           </CardActions>
         </Card>
       </div>
-      );
-  }
-
-  render() {
-    return (
-      <Grid container className={this.classes.root} spacing={16}>
-          <Grid item xs>
-            {this.makeEntry(this.state.passportScan1, 'Passport Scan', 'description', 'passportScan1')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-      </Grid>
-      
     );
   }
 
@@ -165,23 +114,17 @@ class DocumentUpload extends Component {
     return (
       <Grid container className={this.classes.root} spacing={24}>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Passport Scan", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Math", "Basic math tasks, limit: 1 hour.")}
         </Grid>
         <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Transcript of Records from High School", "Should be without visible image defects, all sides/all pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
+          {this.getDocumentTile("Programming", "Tasks for alforithm building, limit: 2 hours.")}
         </Grid>
       </Grid>
     );
   }
 }
 
-DocumentUpload.propTypes = {
+TestsSelector.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -190,4 +133,4 @@ DocumentUpload.propTypes = {
 
 // }
 
-export default withStyles(styles)(DocumentUpload);
+export default withStyles(styles)(TestsSelector);

@@ -20,6 +20,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from "assets/img/crowd.jpg";
 import logo from "assets/img/inno_logo.png";
+import { Button } from "@material-ui/core";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class Dashboard extends React.Component {
       fixedClasses: "dropdown show",
       mobileOpen: false,
       redirecting: false,
-      userType: localStorage.getItem(USERTYPE_NAME)
+      userType: "interviewer"//localStorage.getItem(USERTYPE_NAME)
     };
     switch(this.state.userType) {
       case "candidate":
@@ -47,7 +48,7 @@ class Dashboard extends React.Component {
         this.routes = managerRoutes;
         break;
       default:
-        this.routes = candidateRoutes;
+        this.routes = adminRoutes;
     }
   }
 
