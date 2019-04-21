@@ -52,10 +52,9 @@ class TestQuestion extends React.Component {
             <Card className={this.classes.card}>
                 <CardContent>
                     <Typography variant="h5" component="h2">
-                        {this.props.text + " " + this.state.selected}
+                        {this.props.text}
                     </Typography>
                     <FormControl component="fieldset" className={this.classes.formControl}>
-                        <FormLabel component="legend">Assign responsibility</FormLabel>
                         <RadioGroup
                             value={this.state.selected}
                             onChange={evt => {
@@ -65,7 +64,7 @@ class TestQuestion extends React.Component {
                         >
                             {this.getRadioButtons()}
                         </RadioGroup>
-                        <FormHelperText>Be careful</FormHelperText>
+                        <FormHelperText>Select one option</FormHelperText>
                     </FormControl>
                 </CardContent>
             </Card>

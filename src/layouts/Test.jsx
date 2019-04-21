@@ -61,33 +61,114 @@ class Test extends React.Component {
   constructor(props) {
     super(props);
     this.classes = props.classes;
+    this.testId = props.testId;
     //console.log(this.classes);
     this.state = {
       login: '',
       password: '',
       started: false,
+      answers: new Map(),
     };
   }
 
-  renderContent() {
-    if(this.state.started == true){
-      let answers = [{text: "answer 1", id: 1}, {text: "answer 2", id: 3}];
-      return <TestQuestion text="Question 1" answers={answers} onSelect={id => {}/*alert(id)*/}/>
+  getQuestions() {
+    var questions = "";
+    fetch(apiUrl + "/test/getQuestions", {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        //mode: "no-cors", // no-cors, cors, *same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            token: localStorage.getItem(AUTHTOKEN_NAME),
+            test: this.testId,
+        }), // body data type must match "Content-Type" header
+    })
+        .then(
+            (response) => {
+                if (response.status !== 200) {
+                    alert("Session closed")
+                    return;
+                }
+                // Examine the text in the response
+                response.json().then((data) => {
+                    questions = data;
+
+
+                });
+            }
+        )
+        .catch(function (err) {
+            console.log('Fetch Error :-S', err);
+        });
+    questions = {
+      questions: [
+        {
+          text: "Question 1",
+          id: 1,
+          answers: [
+            {
+              text: "hot",
+              id: 0,
+            },
+            {
+              text: "cold",
+              id: 4,
+            }
+          ]
+        },
+        {
+          text: "Question 2",
+          id: 3,
+          answers: [
+            {
+              text: "mean",
+              id: 1,
+            },
+            {
+              text: "dumb",
+              id: 2,
+            }
+          ]
+        }
+      ]
     }
-    else{
+    return questions.questions.map(question => <TestQuestion text={question.text} answers={question.answers} 
+    onSelect={id => {
+      let nAnswers = new Map(this.state.answers);
+      nAnswers.set(question.id, id);
+      this.setState({
+        answers: nAnswers,
+      })
+    }} />)
+  }
+
+
+
+  renderContent() {
+    if (this.state.started == true) {
+      let answers = [{ text: "answer 1", id: 1 }, { text: "answer 2", id: 3 }];
+      let questionId = 0;
+      return (<div>
+        {this.getQuestions()}
+        <Button color="primary" variant="contained" fullWidth>Submit</Button>
+      </div>)
+    }
+    else {
       return (
-          <form className={this.classes.form} onSubmit={() => this.setState({ started: true })}>
-            Welcome to Maths Test, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
+        <form className={this.classes.form} onSubmit={() => this.setState({ started: true })}>
+          Welcome to Maths Test, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
             <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={this.classes.submit}
-            >
-              Start Test
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={this.classes.submit}
+          >
+            Start Test
           </Button>
-          </form>
+        </form>
       )
     }
   }
@@ -97,7 +178,7 @@ class Test extends React.Component {
       <main className={this.classes.main}>
         <CssBaseline />
         <Paper className={this.classes.paper}>
-        <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5">
             Maths Test
         </Typography>
           {this.renderContent()}
