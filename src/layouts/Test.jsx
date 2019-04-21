@@ -61,7 +61,9 @@ class Test extends React.Component {
   constructor(props) {
     super(props);
     this.classes = props.classes;
-    this.testId = props.testId;
+    let test = JSON.parse(localStorage.getItem("test"));
+    this.testId = test.id;
+    this.testName = test.name;
     //console.log(this.classes);
     this.state = {
       login: '',
@@ -178,9 +180,9 @@ class Test extends React.Component {
                 }
                 // Examine the text in the response
                 response.json().then((data) => {
-                  console.log(data);
-                  this.props.dispatch({ type: 'UPDATE', token: data.token });
-                  this.props.history.push('/dashboard');
+                  //console.log(data);
+                  //this.props.dispatch({ type: 'UPDATE', token: data.token });
+                  this.props.history.push('/dashboard/tests');
                 });
               }
             )
@@ -194,7 +196,7 @@ class Test extends React.Component {
     else {
       return (
         <form className={this.classes.form} onSubmit={() => this.setState({ started: true })}>
-          Welcome to Maths Test, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
+          Welcome to {this.testName}, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
             <Button
             type="submit"
             fullWidth
@@ -215,7 +217,7 @@ class Test extends React.Component {
         <CssBaseline />
         <Paper className={this.classes.paper}>
           <Typography component="h1" variant="h5">
-            Maths Test
+            {this.testName}
         </Typography>
           {this.renderContent()}
         </Paper>

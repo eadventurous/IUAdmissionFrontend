@@ -85,7 +85,7 @@ class TestsSelector extends Component {
   }
 
   getDocumentTile(name, description) {
-    const {classes} = this.classes;
+    const { classes } = this.classes;
     return (
       <div>
         <Card className={classes.card}>
@@ -101,8 +101,16 @@ class TestsSelector extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-              <Button variant="outlined" onClick={()=>{this.props.history.push("/test")}} component="span" className={classes.button}>
-                Open
+            <Button variant="outlined" onClick={() => {
+              this.props.history.push("/test");
+              localStorage.setItem("test", JSON.stringify({
+                id: 0,
+                name: "Math test"
+              }));
+              //alert(localStorage.getItem("test"));
+            }
+            } component="span" className={classes.button}>
+              Open
               </Button>
           </CardActions>
         </Card>
