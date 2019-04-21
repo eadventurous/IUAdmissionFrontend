@@ -1,13 +1,19 @@
 FROM node:carbon
 
-WORKDIR /usr/src/app
+# Создать директорию app
+WORKDIR /app
 
+# Установить зависимости приложения
+# Используется символ подстановки для копирования как package.json, так и package-lock.json,
+# работает с npm@5+
 COPY package*.json ./
 
 RUN npm install
-RUN npm audit fix
+# Используется при сборке кода в продакшене
+# RUN npm install --only=production
 
-COPY . .
+# Скопировать исходники приложения
+COPY src /app
 
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "node", "server.js" ]
