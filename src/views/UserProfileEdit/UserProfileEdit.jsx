@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -15,8 +16,8 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import FormControl from '@material-ui/core/FormControl';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MuiPhoneNumber from 'material-ui-phone-number';
-import UnknownPersonPhoto from 'assets/img/unknown_person.png'
-
+import UnknownPersonPhoto from 'assets/img/unknown_person.png';
+import {saveAs} from "file-saver";
 
 import avatar from "assets/img/faces/marc.jpg";
 
@@ -98,7 +99,7 @@ class UserProfile extends Component {
         telegram_alias: data.telegram,
         about_me: data.about,
       }))
-      .then(() => this.downloadProfilePhoto(this, 'profilePhoto', ))
+      .then(() => this.downloadProfilePhoto(this, 'profilePhoto' ))
       .catch(error => console.log(error));
       // console.log(this.state);
   }
@@ -156,11 +157,13 @@ class UserProfile extends Component {
     reader.fileName = file.name;
     var self = this;
     reader.onload = function(event) {
-      var arrayBuffer = this.result,
-      array = new Uint8Array(arrayBuffer),
-      binaryString = String.fromCharCode.apply(null, array);
-      self.uploadFile(self, 'profilePhoto', event.target.fileName, binaryString);
-      // console.log(event.target.fileName)
+      var arrayBuffer = this.result;
+      var array = new Uint8Array(arrayBuffer);
+      // var binaryString = String.fromCharCode.apply(null, array);
+      var binaryString = new TextDecoder("ascii").decode(arrayBuffer);
+      self.uploadProfilePhoto(self, 'profilePhoto', event.target.fileName, binaryString);
+      
+      // console.log(event.target.fileName);
       // self.fileAvatarSet(self.bytesToBlob(binaryString));
     }
     reader.readAsArrayBuffer(file);
@@ -168,7 +171,7 @@ class UserProfile extends Component {
 
   setPhoto(self, str)
   {
-    self.fileAvatarSet(self.bytesToBlob(str));
+    self.fileAvatarSet(self, self.bytesToBlob(str));
   }
 
   bytesToBlob(str)
@@ -178,15 +181,18 @@ class UserProfile extends Component {
     for (var i=0, strLen=str.length; i < strLen; i++) {
       bufView[i] = str.charCodeAt(i);
     }
-    return new Blob([buf]);
+    
+    // var bufView = new TextEncoder("ascii").encode(str);
+    return new Blob([bufView]);
   }
 
-  fileAvatarSet(file)
+  fileAvatarSet(self, file)
   {
     var fr = new FileReader();
-    var self = this;
     fr.onload = function () {
-        self.state.photo = fr.result;
+        self.setState({photo: fr.result});
+        saveAs(fr.result, "hello.png");
+        // console.log(fr.result);
     }
     fr.readAsDataURL(file);
   }
@@ -203,20 +209,42 @@ class UserProfile extends Component {
         'Authorization': self.state.authToken,
         'Content-Type': 'application/json'
       }),
-    }).then(response => response.json())
+    })// .then(json => console.log(json))
+      .then(response => response.json())
+      .then(function(json) {
+        console.log(json.bytes);
+        return json;
+      })
       .then(json => self.setPhoto(self, json.bytes));
   }
 
-  uploadFile(self, type, filename, bytes)
+  // uploadFile(self, type, filename, bytes)
+  // {
+  //   console.log(bytes);
+  //   fetch(apiUrl + fileStoragePath, {
+  //     method: 'POST',
+  //     headers: new Headers({
+  //       'Authorization': self.state.authToken,
+  //       'Content-Type': 'application/json'
+  //     }),
+  //     body: JSON.stringify({"Data": {Type: type, FileName: filename}, Bytes: bytes})
+  //   })
+  // }
+
+  uploadProfilePhoto(self, type, filename, bytes)
   {
-    console.log(bytes);
     fetch(apiUrl + fileStoragePath, {
       method: 'POST',
       headers: new Headers({
-        'Authorization': self.state.authToken,
+        'Authorization': this.state.authToken,
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify({"Data": {Type: type, FileName: filename}, Bytes: bytes})
+    }).then(function (response) {
+      console.log(response.status);
+      if(response.status == 200) {
+        self.setPhoto(self, bytes);
+      }
     })
   }
 
