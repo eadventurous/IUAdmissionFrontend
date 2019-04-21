@@ -20,6 +20,7 @@ import image from "assets/img/crowd.jpg";
 import logo from "assets/img/inno_logo.png";
 import { Button } from "@material-ui/core";
 
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -120,35 +121,38 @@ class Dashboard extends React.Component {
 
     const { classes, ...rest } = this.props;
     return (
+      
       <div style={{height: '100%'}} className={classes.wrapper}>
-        <Sidebar
-          routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
-          //   if (!elem.hidden) {
-          //     return (elem);
-          //   }
-          // })}
-          logoText={"IU Admission"}
-          logo={logo}
-          image={this.state.image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color={this.state.color}
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Navbar
-            routes={this.routes}
+        
+          <Sidebar
+            routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
+            //   if (!elem.hidden) {
+            //     return (elem);
+            //   }
+            // })}
+            logoText={"IU Admission"}
+            logo={logo}
+            image={this.state.image}
             handleDrawerToggle={this.handleDrawerToggle}
+            open={this.state.mobileOpen}
+            color={this.state.color}
             {...rest}
           />
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{this.switchRoutes()}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{this.switchRoutes()}</div>
-          )}
-        </div>
+          <div className={classes.mainPanel} ref="mainPanel">
+          
+            <Navbar
+              routes={this.routes}
+              handleDrawerToggle={this.handleDrawerToggle}
+              {...rest}
+            />
+            {this.getRoute() ? (
+              <div className={classes.content}>
+                <div className={classes.container}>{this.switchRoutes()}</div>
+              </div>
+            ) : (
+              <div className={classes.map}>{this.switchRoutes()}</div>
+            )}
+          </div>
       </div>
     );
   }

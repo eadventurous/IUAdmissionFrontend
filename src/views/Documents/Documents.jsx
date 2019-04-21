@@ -2,13 +2,6 @@ import React, { Component } from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
-// core components
-// import Button from "components/CustomButtons/Button.jsx";
-// import Card from "components/Card/Card.jsx";
-// import CardHeader from "components/Card/CardHeader.jsx";
-// import CardAvatar from "components/Card/CardAvatar.jsx";
-// import CardBody from "components/Card/CardBody.jsx";
-// import CardFooter from "components/Card/CardFooter.jsx";
 import { DropzoneArea } from 'material-ui-dropzone'
 
 import Grid from '@material-ui/core/Grid';
@@ -18,10 +11,10 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
-import avatar from "assets/img/faces/marc.jpg";
-//Hello
-import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
+import { apiUrl, fileStoragePath, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
+import {saveAs} from "file-saver";
+import LoadingOverlay from 'react-loading-overlay';
+import SyncLoader from 'react-spinners/SyncLoader'
 
 const styles = theme => ({
   root: {
@@ -70,8 +63,13 @@ class DocumentUpload extends Component {
       profileInfo: [],
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
       files: [],
-      passportScan1: "Hello Johnny!",
-      passportScan2: null,
+      cvname: "no file",
+      mlname: "no file",
+      trname: "no file",
+      psname: "no file",
+      rcname: "no file",
+      prname: "no file",
+      overlayActive: false,
     };
   }
 
@@ -92,7 +90,108 @@ class DocumentUpload extends Component {
       .then(response => response.json())
       .then(json => console.log(json));
   }
-  makeEntry(top, title, description, reference) {
+
+  updateFile(file, type)
+  {
+    var reader = new FileReader();
+    reader.fileName = file.name;
+    var self = this;
+    reader.onload = function(event) {
+      var arrayBuffer = this.result;
+      var array = new Uint8Array(arrayBuffer);
+      var binaryString = "";
+      for (var i=0, len=array.length; i < len; i++) {
+        binaryString+=String.fromCharCode(array[i]);
+      }
+      self.uploadFile(self, type, event.target.fileName, binaryString);
+    }
+    reader.readAsArrayBuffer(file);
+  }
+
+  showOverlay(self = this)
+  {
+    self.setState({overlayActive: true});
+  }
+
+  hideOverlay(self = this)
+  {
+    self.setState({overlayActive: false});
+  }
+
+  getFileFromServer(self, type)
+  {
+    self.showOverlay(self);
+    var url = new URL(apiUrl + fileStoragePath);
+    var params = {type: type};
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    console.log(url);
+    fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': self.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+    })// .then(json => console.log(json))
+      .then(response => response.json())
+      .then(function(json) {
+        console.log(json.bytes);
+        return json;
+      })
+      .then(json => {console.log(json); self.fileDownloadCall(self, json.data.fileName, json.bytes);})
+      .then(() => self.hideOverlay(self))
+  }
+
+  fileDownloadCall(self, filename, str)
+  {
+    self.fileDownload(self, filename, self.bytesToBlob(str));
+  }
+
+  bytesToBlob(str)
+  {
+    var buf = new ArrayBuffer(str.length);
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    
+    // var bufView = new TextEncoder("ascii").encode(str);
+    return new Blob([bufView]);
+  }
+
+  fileDownload(self, filename, file)
+  {
+    var fr = new FileReader();
+    fr.onload = function () {
+        // self.setState({photo: fr.result});
+        console.log(filename);
+        saveAs(fr.result, filename);
+        // console.log(fr.result);
+    }
+    fr.readAsDataURL(file);
+  }
+
+  uploadFile(self, type, filename, bytes)
+  {
+    self.showOverlay(self)
+    console.log("Started uploading image.");
+    fetch(apiUrl + fileStoragePath, {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({"Data": {Type: type, FileName: filename}, Bytes: bytes})
+    }).then(function (response) {
+      console.log(response.status);
+      if(response.status == 200) {
+        self.setState({[type]: filename});
+      }else{
+        alert("Can not update photo.");
+      }
+    }).then(() => self.hideOverlay(self));
+  }
+
+  makeEntry(top, title, filename, reference) {
     const { classes } = this.classes;
     return (
       <div>
@@ -105,24 +204,28 @@ class DocumentUpload extends Component {
               {title}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-              {description}
+              {this.state[filename]}
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
             <input
-              accept="image/*"
+              accept="application/pdf,application/msword,
+              application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               className={classes.input}
               style={{ display: 'none' }}
-              id="outlined-button-file"
-              multiple
-              onChange={()=>{this.setState({[reference]: "Hi"})}}
+              id={reference}
+              onChange={()=>{this.updateFile(this.refs[reference].files[0], filename)}}
               type="file"
+              ref={reference}
               />
-            <label htmlFor="outlined-button-file">
+            <label htmlFor={reference}>
               <Button variant="outlined" component="span" className={classes.button}>
                 Upload
               </Button>
             </label>
+            <Button variant="outlined" onClick={() => this.getFileFromServer(this, filename)} component="span" className={classes.button}>
+                Download
+              </Button>
           </CardActions>
         </Card>
       </div>
@@ -131,52 +234,38 @@ class DocumentUpload extends Component {
 
   render() {
     return (
+      <LoadingOverlay
+            active={this.state.overlayActive}
+            spinner={<SyncLoader />}
+            styles={{
+              wrapper: {
+                overflow: this.state.overlayActive ? 'hidden' : 'visible'
+              }
+            }}
+            text=''
+            >
       <Grid container className={this.classes.root} spacing={16}>
           <Grid item xs>
-            {this.makeEntry(this.state.passportScan1, 'Passport Scan', 'description', 'passportScan1')}
+            {this.makeEntry('required', 'Curriculum Vitae', 'cvname', 'cv')}
           </Grid>
           <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+            {this.makeEntry('required', 'Motivation Letter', 'mlname', 'ml')}
           </Grid>
           <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+            {this.makeEntry('required', 'Transcript of Records', 'trname', 'tr')}
           </Grid>
           <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+            {this.makeEntry('required', 'Passport Scan', 'psname', 'ps')}
           </Grid>
           <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+            {this.makeEntry('optional', 'Recommendations', 'rcname', 'rc')}
           </Grid>
           <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
-          </Grid>
-          <Grid item xs>
-            {this.makeEntry('required', 'Passport Scan', 'description', 'passportScan')}
+            {this.makeEntry('optional', 'Projects', 'prname', 'pr')}
           </Grid>
       </Grid>
+      </LoadingOverlay>
       
-    );
-  }
-
-  render() {
-    return (
-      <Grid container className={this.classes.root} spacing={24}>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Passport Scan", "Should be without visible image defects, only first two pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Transcript of Records from High School", "Should be without visible image defects, all sides/all pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Another doc", "Should be without visible image defects, only first two pages.")}
-        </Grid>
-      </Grid>
     );
   }
 }

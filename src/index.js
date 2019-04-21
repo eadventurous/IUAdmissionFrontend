@@ -38,8 +38,10 @@ store.subscribe(() => {
 });
 
 ReactDOM.render(
+  
   <Provider store={store}>
     <Router history={hist}>
+  
       <Switch>
         <Route path="/test" component={Test}/>
         <Route path="/login" component={SignIn} />
