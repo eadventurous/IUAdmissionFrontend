@@ -159,12 +159,11 @@ class UserProfile extends Component {
     reader.onload = function(event) {
       var arrayBuffer = this.result;
       var array = new Uint8Array(arrayBuffer);
-      // var binaryString = String.fromCharCode.apply(null, array);
-      var binaryString = new TextDecoder("ascii").decode(arrayBuffer);
+      var binaryString = "";
+      for (var i=0, len=array.length; i < len; i++) {
+        binaryString+=String.fromCharCode(array[i]);
+      }
       self.uploadProfilePhoto(self, 'profilePhoto', event.target.fileName, binaryString);
-      
-      // console.log(event.target.fileName);
-      // self.fileAvatarSet(self.bytesToBlob(binaryString));
     }
     reader.readAsArrayBuffer(file);
   }
@@ -244,6 +243,8 @@ class UserProfile extends Component {
       console.log(response.status);
       if(response.status == 200) {
         self.setPhoto(self, bytes);
+      }else{
+        alert("Can not update photo.");
       }
     })
   }
@@ -420,7 +421,6 @@ class UserProfile extends Component {
                   className={classes.input}
                   style={{ display: 'none' }}
                   id="outlined-button-file"
-                  multiple
                   onChange={()=>this.updateProfilePhoto(this.refs.File1.files[0])}//this.setState({file: file})}}
                   type="file"
                   ref="File1"
