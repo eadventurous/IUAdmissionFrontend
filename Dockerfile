@@ -13,7 +13,7 @@ RUN npm install
 # RUN npm install --only=production
 
 # Скопировать исходники приложения
-COPY src /app
+COPY src /app/src
 
 EXPOSE 3000
 CMD [ "node", "server.js" ]
