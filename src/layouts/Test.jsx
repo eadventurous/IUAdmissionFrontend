@@ -74,72 +74,11 @@ class Test extends React.Component {
   }
 
   getQuestions() {
-    var questions = "";
-    fetch(apiUrl + "/test/getQuestions", {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      //mode: "no-cors", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem(AUTHTOKEN_NAME),
-        test: this.testId,
-      }), // body data type must match "Content-Type" header
-    })
-      .then(
-        (response) => {
-          if (response.status !== 200) {
-            alert("Session closed")
-            return;
-          }
-          // Examine the text in the response
-          response.json().then((data) => {
-            questions = data;
-
-
-          });
-        }
-      )
-      .catch(function (err) {
-        console.log('Fetch Error :-S', err);
-      });
-    questions = {
-      questions: [
-        {
-          text: "Question 1",
-          id: 1,
-          answers: [
-            {
-              text: "hot",
-              id: 0,
-            },
-            {
-              text: "cold",
-              id: 4,
-            }
-          ]
-        },
-        {
-          text: "Question 2",
-          id: 3,
-          answers: [
-            {
-              text: "mean",
-              id: 1,
-            },
-            {
-              text: "dumb",
-              id: 2,
-            }
-          ]
-        }
-      ]
-    }
-    return questions.questions.map(question => <TestQuestion text={question.text} answers={question.answers}
+    let questions = JSON.parse(localStorage.getItem("test"));
+    return questions.questions.map(question => <TestQuestion text={question.questionText} answers={question.answers}
       onSelect={id => {
         let nAnswers = new Map(this.state.answers);
-        nAnswers.set(question.id, id);
+        nAnswers.set(question.questionId, id);
         this.setState({
           answers: nAnswers,
         })
@@ -163,11 +102,11 @@ class Test extends React.Component {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id: this.testId,
-              answers: this.state.answers.forEach((mId, mAnswer, m) => {
+              TestId: this.testId,
+              QuestionAnswerPairs: this.state.answers.forEach((mId, mAnswer, m) => {
                 return {
-                  id: mId,
-                  answer: mAnswer,
+                  QuestionId: mId,
+                  AnswerId: mAnswer,
                 }
               })
             }), // body data type must match "Content-Type" header

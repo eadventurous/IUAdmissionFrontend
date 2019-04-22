@@ -36,14 +36,14 @@ class TestQuestion extends React.Component {
     constructor(props) {
         super(props);
         this.classes = props.classes;
-        this.state = {selected: props.answers[0].id};
+        this.state = {selected: props.answers[0].answerId};
     }
 
     getRadioButtons() {
         return this.props.answers.map(answer => (<FormControlLabel
             control={<Radio color="primary" />}
-            label={answer.text}
-            value={answer.id}
+            label={answer.answerText}
+            value={answer.answerId}
         />))
     }
 

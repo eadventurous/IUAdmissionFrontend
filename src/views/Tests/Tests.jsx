@@ -88,12 +88,43 @@ class TestsSelector extends Component {
     var tests = {
       tests: [
         {
-          id: 1,
+          testId: 1,
           name: "Math Test",
+          questions: [
+            {
+              questionText: "Question 1",
+              questionId: 1,
+              answers: [
+                {
+                  answerText: "hot",
+                  answerId: 0,
+                },
+                {
+                  answerText: "cold",
+                  answerId: 4,
+                }
+              ]
+            },
+            {
+              questionText: "Question 2",
+              questionId: 3,
+              answers: [
+                {
+                  answerText: "mean",
+                  answerId: 1,
+                },
+                {
+                  answerText: "dumb",
+                  answerId: 2,
+                }
+              ]
+            }
+          ]
         },
         {
-          id: 2,
+          testId: 2,
           name: "Programming test",
+          questions: [],
         }
       ]
     }
