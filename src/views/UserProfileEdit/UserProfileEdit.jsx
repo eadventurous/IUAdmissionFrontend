@@ -236,7 +236,7 @@ class UserProfile extends Component {
 
   uploadProfilePhoto(self, type, filename, bytes)
   {
-    self.showOverlay(self)
+    self.showOverlay(self);
     console.log("Started uploading image.");
     fetch(apiUrl + fileStoragePath, {
       method: 'POST',
