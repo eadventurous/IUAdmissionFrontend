@@ -1,0 +1,146 @@
+
+> material-dashboard-react@1.6.0 start /home/modbrin/projects/IUAdmissionFrontend
+> react-scripts start
+
+Starting the development server...
+
+
+> material-dashboard-react@1.6.0 start /home/modbrin/projects/IUAdmissionFrontend
+> react-scripts start
+
+Starting the development server...
+
+Compiled with warnings.
+
+./src/layouts/SignIn.jsx
+  Line 15:  'USERTYPE_NAME' is defined but never used   no-unused-vars
+  Line 15:  'AUTHTOKEN_NAME' is defined but never used  no-unused-vars
+
+./src/components/Navbars/AdminNavbarLinks.jsx
+  Line 2:    'classNames' is defined but never used         no-unused-vars
+  Line 5:    'MenuItem' is defined but never used           no-unused-vars
+  Line 6:    'MenuList' is defined but never used           no-unused-vars
+  Line 7:    'Grow' is defined but never used               no-unused-vars
+  Line 8:    'Paper' is defined but never used              no-unused-vars
+  Line 9:    'ClickAwayListener' is defined but never used  no-unused-vars
+  Line 10:   'Hidden' is defined but never used             no-unused-vars
+  Line 11:   'Poppers' is defined but never used            no-unused-vars
+  Line 13:   'Person' is defined but never used             no-unused-vars
+  Line 14:   'Notifications' is defined but never used      no-unused-vars
+  Line 15:   'Dashboard' is defined but never used          no-unused-vars
+  Line 16:   'Search' is defined but never used             no-unused-vars
+  Line 18:   'CustomInput' is defined but never used        no-unused-vars
+  Line 19:   'Button' is defined but never used             no-unused-vars
+  Line 45:  'classes' is assigned a value but never used   no-unused-vars
+  Line 46:  'open' is assigned a value but never used      no-unused-vars
+
+./src/routes.js
+  Line 2:   'Dashboard' is defined but never used          no-unused-vars
+  Line 5:   'BubbleChart' is defined but never used        no-unused-vars
+  Line 6:   'LocationOn' is defined but never used         no-unused-vars
+  Line 7:   'Notifications' is defined but never used      no-unused-vars
+  Line 9:   'Unarchive' is defined but never used          no-unused-vars
+  Line 10:  'Language' is defined but never used           no-unused-vars
+  Line 12:  'DashboardPage' is defined but never used      no-unused-vars
+  Line 19:  'TableList' is defined but never used          no-unused-vars
+  Line 24:  'NotificationsPage' is defined but never used  no-unused-vars
+
+./src/layouts/Test.jsx
+  Line 3:    'Avatar' is defined but never used               no-unused-vars
+  Line 6:    'FormControl' is defined but never used          no-unused-vars
+  Line 7:    'FormControlLabel' is defined but never used     no-unused-vars
+  Line 8:    'Checkbox' is defined but never used             no-unused-vars
+  Line 9:    'Input' is defined but never used                no-unused-vars
+  Line 10:   'InputLabel' is defined but never used           no-unused-vars
+  Line 11:   'LockOutlinedIcon' is defined but never used     no-unused-vars
+  Line 15:  'USERTYPE_NAME' is defined but never used        no-unused-vars
+  Line 15:  'AUTHTOKEN_NAME' is defined but never used       no-unused-vars
+  Line 15:  'authPath' is defined but never used             no-unused-vars
+  Line 17:  'Link' is defined but never used                 no-unused-vars
+  Line 91:  Expected '===' and instead saw '=='              eqeqeq
+  Line 92:  'answers' is assigned a value but never used     no-unused-vars
+  Line 93:  'questionId' is assigned a value but never used  no-unused-vars
+
+./src/views/Documents/Documents.jsx
+  Line 4:     'InputLabel' is defined but never used     no-unused-vars
+  Line 5:    'DropzoneArea' is defined but never used   no-unused-vars
+  Line 14:   'USERTYPE_NAME' is defined but never used  no-unused-vars
+  Line 48:    Duplicate key 'root'                       no-dupe-keys
+  Line 186:  Expected '===' and instead saw '=='        eqeqeq
+
+./src/views/UserProfile/UserProfile.jsx
+  Line 4:    'InputLabel' is defined but never used        no-unused-vars
+  Line 15:   'FormControl' is defined but never used       no-unused-vars
+  Line 17:   'MuiPhoneNumber' is defined but never used    no-unused-vars
+  Line 22:  'USERTYPE_NAME' is defined but never used     no-unused-vars
+  Line 23:  'FormControlLabel' is defined but never used  no-unused-vars
+  Line 88:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 89:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 90:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 91:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 92:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 93:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 94:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 95:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+  Line 96:   Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+
+./src/views/Users/Users.jsx
+  Line 4:    'InputLabel' is defined but never used      no-unused-vars
+  Line 6:    'GridItem' is defined but never used        no-unused-vars
+  Line 7:    'GridContainer' is defined but never used   no-unused-vars
+  Line 8:    'CustomInput' is defined but never used     no-unused-vars
+  Line 15:  'DropzoneArea' is defined but never used    no-unused-vars
+  Line 23:   'Grid' is defined but never used            no-unused-vars
+  Line 38:   'FormHelperText' is defined but never used  no-unused-vars
+  Line 41:   'avatar' is defined but never used          no-unused-vars
+  Line 43:  'USERTYPE_NAME' is defined but never used   no-unused-vars
+  Line 44:  'TableFooter' is defined but never used     no-unused-vars
+
+./src/views/UserGroups/UserGroups.jsx
+  Line 4:    'InputLabel' is defined but never used     no-unused-vars
+  Line 6:    'GridItem' is defined but never used       no-unused-vars
+  Line 7:    'GridContainer' is defined but never used  no-unused-vars
+  Line 8:    'CustomInput' is defined but never used    no-unused-vars
+  Line 15:  'DropzoneArea' is defined but never used   no-unused-vars
+  Line 25:   'avatar' is defined but never used         no-unused-vars
+  Line 27:  'USERTYPE_NAME' is defined but never used  no-unused-vars
+
+./src/views/Tests/Tests.jsx
+  Line 4:    'InputLabel' is defined but never used     no-unused-vars
+  Line 6:    'GridItem' is defined but never used       no-unused-vars
+  Line 7:    'GridContainer' is defined but never used  no-unused-vars
+  Line 8:    'CustomInput' is defined but never used    no-unused-vars
+  Line 15:  'DropzoneArea' is defined but never used   no-unused-vars
+  Line 25:   'avatar' is defined but never used         no-unused-vars
+  Line 27:  'USERTYPE_NAME' is defined but never used  no-unused-vars
+
+./src/components/TestQuestion.jsx
+  Line 4:  'CardActions' is defined but never used  no-unused-vars
+  Line 6:  'Button' is defined but never used       no-unused-vars
+  Line 8:  'FormLabel' is defined but never used    no-unused-vars
+
+./src/views/UserProfileEdit/UserProfileEdit.jsx
+  Line 5:     'InputLabel' is defined but never used                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+  Line 9:     'CustomInput' is defined but never used                                                                                                                                                                                                                                                                                                                                  no-unused-vars
+  Line 20:    'saveAs' is defined but never used                                                                                                                                                                                                                                                                                                                                       no-unused-vars
+  Line 22:    'avatar' is defined but never used                                                                                                                                                                                                                                                                                                                                       no-unused-vars
+  Line 24:   'USERTYPE_NAME' is defined but never used                                                                                                                                                                                                                                                                                                                                no-unused-vars
+  Line 25:   'FormControlLabel' is defined but never used                                                                                                                                                                                                                                                                                                                             no-unused-vars
+  Line 226:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                                                      eqeqeq
+  Line 228:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                                                      eqeqeq
+  Line 250:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                                                      eqeqeq
+  Line 430:  The href attribute is required for an anchor to be keyboard accessible. Provide a valid, navigable address as the href value. If you cannot provide an href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+
+./src/index.js
+  Line 7:  'USERTYPE_NAME' is defined but never used  no-unused-vars
+
+./src/layouts/SignUp.jsx
+  Line 7:    'FormControlLabel' is defined but never used   no-unused-vars
+  Line 8:    'Checkbox' is defined but never used           no-unused-vars
+  Line 19:  'RegionDropdown' is defined but never used     no-unused-vars
+  Line 19:  'CountryRegionData' is defined but never used  no-unused-vars
+  Line 78:  Expected '!==' and instead saw '!='            eqeqeq
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
