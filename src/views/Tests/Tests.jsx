@@ -84,41 +84,96 @@ class TestsSelector extends Component {
       .then(json => console.log(json));
   }
 
-  getDocumentTile(name, description) {
-    const {classes} = this.classes;
-    return (
-      <div>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              required
+  fetchTests() {
+    var tests = {
+      tests: [
+        {
+          testId: 1,
+          name: "Math Test",
+          questions: [
+            {
+              questionText: "Question 1",
+              questionId: 1,
+              answers: [
+                {
+                  answerText: "hot",
+                  answerId: 0,
+                },
+                {
+                  answerText: "cold",
+                  answerId: 4,
+                }
+              ]
+            },
+            {
+              questionText: "Question 2",
+              questionId: 3,
+              answers: [
+                {
+                  answerText: "mean",
+                  answerId: 1,
+                },
+                {
+                  answerText: "dumb",
+                  answerId: 2,
+                }
+              ]
+            }
+          ]
+        },
+        {
+          testId: 2,
+          name: "Programming test",
+          questions: [],
+        }
+      ]
+    }
+    fetch(apiUrl + "/getTests", {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        // 'Content-Type': 'application/json'
+      })
+    })
+      .then(response => response.json())
+      .then(json => tests = json);
+    return tests.tests;
+  }
+
+  getTests(tests) {
+    const { classes } = this.classes;
+    return tests.map(test => (
+      <Grid item className={this.classes.paper}>
+        <div>
+          <Card className={classes.card}>
+            <CardContent>
+              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                required
             </Typography>
-            <Typography variant="h5" component="h2">
-              {name}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              {description}
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.actions}>
-              <Button variant="outlined" onClick={()=>{this.props.history.push("/test")}} component="span" className={classes.button}>
+              <Typography variant="h5" component="h2">
+                {test.name}
+              </Typography>
+            </CardContent>
+            <CardActions className={classes.actions}>
+              <Button variant="outlined" onClick={() => {
+                this.props.history.push("/test");
+                localStorage.setItem("test", JSON.stringify(test));
+                //alert(localStorage.getItem("test"));
+              }
+              } component="span" className={classes.button}>
                 Open
               </Button>
-          </CardActions>
-        </Card>
-      </div>
-    );
+            </CardActions>
+          </Card>
+        </div>
+      </Grid>
+    ));
   }
 
   render() {
     return (
       <Grid container className={this.classes.root} spacing={24}>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Math", "Basic math tasks, limit: 1 hour.")}
-        </Grid>
-        <Grid item className={this.classes.paper}>
-          {this.getDocumentTile("Programming", "Tasks for alforithm building, limit: 2 hours.")}
-        </Grid>
+        {this.getTests(this.fetchTests())}
       </Grid>
     );
   }

@@ -15,6 +15,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, authPath } from '../config.js'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import TestQuestion from '../components/TestQuestion'
 
 
 const styles = theme => ({
@@ -34,7 +35,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minWidth: 500,
+    minWidth: 600,
     padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
   },
   avatar: {
@@ -56,52 +57,97 @@ const styles = theme => ({
 
 
 
-class SignIn extends React.Component {
+class Test extends React.Component {
   constructor(props) {
     super(props);
     this.classes = props.classes;
+    let test = JSON.parse(localStorage.getItem("test"));
+    this.testId = test.id;
+    this.testName = test.name;
     //console.log(this.classes);
     this.state = {
       login: '',
-      password: ''
+      password: '',
+      started: false,
+      answers: new Map(),
     };
-    this.logIn = this.logIn.bind(this);
   }
 
-  logIn(event) {
-    event.preventDefault();
-    const data = { login: this.state.login, password: this.state.password };
+  getQuestions() {
+    let questions = JSON.parse(localStorage.getItem("test"));
+    return questions.questions.map(question => <TestQuestion text={question.questionText} answers={question.answers}
+      onSelect={id => {
+        let nAnswers = new Map(this.state.answers);
+        nAnswers.set(question.questionId, id);
+        this.setState({
+          answers: nAnswers,
+        })
+      }} />)
+  }
 
-    fetch(apiUrl + authPath, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      // mode: "no-cors", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    })
-      .then(
-        (response) => {
-          if (response.status !== 200) {
-            alert("Invalid login or password")
-            return;
-          }
-          // Examine the text in the response
-          response.json().then((data) => {
-            console.log(data);
-            this.props.dispatch({ type: 'UPDATE', token: data.token });
-            this.props.history.push('/dashboard');
-          });
-        }
+
+
+  renderContent() {
+    if (this.state.started == true) {
+      let answers = [{ text: "answer 1", id: 1 }, { text: "answer 2", id: 3 }];
+      let questionId = 0;
+      return (<div>
+        {this.getQuestions()}
+        <Button color="primary" variant="contained" fullWidth onClick={() => {
+          fetch(apiUrl + "/test/submit", {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            // mode: "no-cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              TestId: this.testId,
+              QuestionAnswerPairs: this.state.answers.forEach((mId, mAnswer, m) => {
+                return {
+                  QuestionId: mId,
+                  AnswerId: mAnswer,
+                }
+              })
+            }), // body data type must match "Content-Type" header
+          })
+            .then(
+              (response) => {
+                if (response.status !== 200) {
+                  alert("Invalid login or password")
+                  return;
+                }
+                // Examine the text in the response
+                response.json().then((data) => {
+                  //console.log(data);
+                  //this.props.dispatch({ type: 'UPDATE', token: data.token });
+                  this.props.history.push('/dashboard/tests');
+                });
+              }
+            )
+            .catch(function (err) {
+              console.log('Fetch Error :-S', err);
+            });
+          this.props.history.push('/dashboard/tests');
+        }}>Submit</Button>
+      </div>)
+    }
+    else {
+      return (
+        <form className={this.classes.form} onSubmit={() => this.setState({ started: true })}>
+          Welcome to {this.testName}, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
+            <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={this.classes.submit}
+          >
+            Start Test
+          </Button>
+        </form>
       )
-      .catch(function (err) {
-        console.log('Fetch Error :-S', err);
-      });
-
-    //Debug code
-    /*this.props.dispatch({type: 'UPDATE', token: this.state.email + "token"});
-    this.props.history.push('/admin/dashboard');*/
+    }
   }
 
   render() {
@@ -110,27 +156,16 @@ class SignIn extends React.Component {
         <CssBaseline />
         <Paper className={this.classes.paper}>
           <Typography component="h1" variant="h5">
-            Maths Test
+            {this.testName}
         </Typography>
-          <form className={this.classes.form} onSubmit={this.logIn}>
-            Welcome to Maths Test, here you will be able to take the test. Please note that you only have 1 hour to finish it. Time will start after you pressing the button.
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={this.classes.submit}
-            >
-              Start Test
-          </Button>
-          </form>
+          {this.renderContent()}
         </Paper>
       </main>
     );
   }
 }
 
-SignIn.propTypes = {
+Test.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -140,6 +175,6 @@ function mapStateToProps(state) {
   };
 }
 
-const SignInStyled = withStyles(styles)(SignIn);
+const TestStyled = withStyles(styles)(Test);
 
-export default connect(mapStateToProps)(SignInStyled);
+export default connect(mapStateToProps)(TestStyled);
