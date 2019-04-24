@@ -22,6 +22,7 @@ import InterviewList from "views/Interviewer/InterviewList.jsx";
 // import Icons from "views/Icons/Icons.jsx";
 // import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
+import CreateTest from "./views/Tests/CreateTest";
 
 
 export const candidateRoutes = [
@@ -105,6 +106,13 @@ export const managerRoutes = [
     component: UserProfile,
     layout: "/dashboard"
   },
+  {
+    path: "/create-test",
+    name: "Create Test",
+    icon: Person,
+    component: CreateTest,
+    layout: "/dashboard"
+  }
 ]
 
 // export const dashboardRoutes = [
