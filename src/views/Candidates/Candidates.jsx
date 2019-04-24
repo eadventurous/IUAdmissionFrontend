@@ -6,12 +6,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
-// import Button from "components/CustomButtons/Button.jsx";
-// import Card from "components/Card/Card.jsx";
-// import CardHeader from "components/Card/CardHeader.jsx";
-// import CardAvatar from "components/Card/CardAvatar.jsx";
-// import CardBody from "components/Card/CardBody.jsx";
-// import CardFooter from "components/Card/CardFooter.jsx";
 import { DropzoneArea } from 'material-ui-dropzone'
 
 import PropTypes from 'prop-types';
@@ -33,14 +27,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 
-import avatar from "assets/img/faces/marc.jpg";
-//Hello
-import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
+import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath, userDataPath, candidatesPath } from '../../config.js'
 import { TableFooter } from "@material-ui/core";
 
 const styles = theme => ({
@@ -87,6 +75,17 @@ class Users extends Component {
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
       files: [],
       dialogOpen: false,
+      email: "",
+      phone_number: "",
+      first_name: "",
+      last_name: "",
+      city: "",
+      country: "",
+      postal_code: "",
+      skype_account: "",
+      telegram_alias: "",
+      about_me: "",
+      rows: [],
     };
   }
 
@@ -97,63 +96,23 @@ class Users extends Component {
   }
 
   componentDidMount() {
-    fetch(apiUrl + profilePath, {
+    fetch(apiUrl + candidatesPath, {
       method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,
-        // 'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       })
     })
-      .then(response => response.json())
-      .then(json => console.log(json));
+      .then(response => {
+        if(response.status == 200){
+          response.json().then((data)=>{
+            this.setState({rows: data});
+            console.log(data);
+          });
+        }})
+      // .then(json => console.log(this.state.rows));
   }
-
-  getDocumentTile(name, description) {
-    const {classes} = this.classes;
-    return (
-      <div>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              {name}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              {description}
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.actions}>
-            <label htmlFor="outlined-button-file">
-              <Button variant="outlined" style={{float: 'right'}} component="span" className={classes.button}>
-                View
-              </Button>
-            </label>
-          </CardActions>
-        </Card>
-      </div>
-    );
-  }
-  rows = [
-    {
-      name: "John Smith",
-      group: "Admin",
-      date: "09.09.2018",
-    },
-    {
-      name: "Mario Plumber",
-      group: "Manager",
-      date: "01.08.2018",
-    },
-    {
-      name: "Francesco Dresden",
-      group: "Manager",
-      date: "11.010.2018",
-    },
-    {
-      name: "Another User",
-      group: "Interviewer",
-      date: "09.09.2018",
-    },
-  ];
+  
 
   handleClickOpen = () => {
     this.setState({ dialogOpen: true });
@@ -162,10 +121,33 @@ class Users extends Component {
   handleClose = () => {
     this.setState({ dialogOpen: false });
   };
-
-  handleSelect = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+  
+  getUserData(id)
+  {
+    fetch(apiUrl + profilePath, {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': this.state.authToken,
+        //'Content-Type': 'application/json'
+      })
+    })
+      .then(response => response.json())
+      // .then(data => console.log(data))
+      .then(data => this.setState({
+        email: data.email,
+        phone_number: data.phone?data.phone:"",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        city: data.city,
+        country: data.country,
+        postal_code: data.postCode,
+        skype_account: data.skype,
+        telegram_alias: data.telegram,
+        about_me: data.about,
+      })).then(() => this.handleClickOpen())
+      // .then(() => this.downloadProfilePhoto(this, 'profilePhoto' ))
+      .catch(error => console.log(error))
+  }
 
   render() {
     const {classes} = this.classes;
@@ -176,23 +158,18 @@ class Users extends Component {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="right">Group</TableCell>
-              <TableCell align="right">Registration Date</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.rows.map(row => (
+            {this.state.rows.map(row => (
               <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.profile.firstName + " " + row.profile.lastName}
                 </TableCell>
-                <TableCell align="right">{row.group}</TableCell>
-                <TableCell align="right">{row.date}</TableCell>
-              <TableCell align="right"><Button>Edit</Button></TableCell>
+              <TableCell align="right"><Button onClick={() => this.getUserData(row.id)}>View</Button></TableCell>
               </TableRow>
             ))}
-              <Button onClick={() => this.handleClickOpen()}>+</Button>
           </TableBody>
         </Table>
       </Paper>
@@ -202,7 +179,7 @@ class Users extends Component {
           fullWidth={true}
           aria-labelledby="form-dialog-title"
         >
-        <DialogTitle id="form-dialog-title">Add new user</DialogTitle>
+        <DialogTitle id="form-dialog-title">Candidate View</DialogTitle>
         <DialogContent>
           <DialogContentText>
             
@@ -212,38 +189,109 @@ class Users extends Component {
                 required
                 id="standard-required"
                 label="Name"
-                fullWidth={true}
-                className={classes.textField}
-                margin="normal"
-              />
-              <FormControl fullWidth={true}>
-              {/* <InputLabel htmlFor="age-simple">User Group</InputLabel> */}
-              <Select
-                value={10}
-                onChange={this.handleSelect}
-                inputProps={{
-                  name: 'age',
-                  id: 'age-simple',
+                InputProps={{
+                  readOnly: true,
                 }}
-              >
-                <MenuItem value={10}>Admin</MenuItem>
-                <MenuItem value={20}>Manager</MenuItem>
-                <MenuItem value={30}>Interviewer</MenuItem>
-              </Select>
-            </FormControl>
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              
               <TextField
                 required
                 id="standard-required"
-                label="E=Mail"
+                label="E-Mail"
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth={true}
+                variant="outlined"
                 className={classes.textField}
                 margin="normal"
               />
               <TextField
                 required
                 id="standard-required"
-                label="Password"
+                label="Phone Number"
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="City"
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="Country"
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="Postal Code"
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="Skype Account"
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="Telegram Alias"
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth={true}
+                variant="outlined"
+                className={classes.textField}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="standard-required"
+                label="Phone Number"
+                InputProps={{
+                  readOnly: true,
+                }}
+                multiline
+                fullWidth={true}
+                variant="outlined"
                 className={classes.textField}
                 margin="normal"
               />

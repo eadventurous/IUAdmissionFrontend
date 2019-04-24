@@ -11,7 +11,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { apiUrl, fileStoragePath, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath } from '../../config.js'
+import { apiUrl, fileStoragePath, USERTYPE_NAME, AUTHTOKEN_NAME, profilePath, fileInfoPath } from '../../config.js'
 import {saveAs} from "file-saver";
 import LoadingOverlay from 'react-loading-overlay';
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -80,15 +80,21 @@ class DocumentUpload extends Component {
   }
 
   componentDidMount() {
-    fetch(apiUrl + profilePath, {
+    fetch(apiUrl + fileInfoPath, {
       method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'
       })
     })
-      .then(response => response.json())
-      .then(json => console.log(json));
+      .then(response => {
+        if(response.status == 200 || response.status == 204)
+        {
+          response.json().then((data) => {
+            console.log(data);
+          })
+        }
+      });
   }
 
   updateFile(file, type)
@@ -225,7 +231,7 @@ class DocumentUpload extends Component {
             </label>
             <Button variant="outlined" onClick={() => this.getFileFromServer(this, filename)} component="span" className={classes.button}>
                 Download
-              </Button>
+            </Button>
           </CardActions>
         </Card>
       </div>

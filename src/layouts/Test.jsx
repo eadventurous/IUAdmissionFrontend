@@ -16,6 +16,7 @@ import { apiUrl, USERTYPE_NAME, AUTHTOKEN_NAME, authPath } from '../config.js'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import TestQuestion from '../components/TestQuestion'
+import Timer from "react-compound-timer";
 
 
 const styles = theme => ({
@@ -107,6 +108,18 @@ class Test extends React.Component {
         })
       })
       return (<div>
+        <Typography variant="h5">
+          <Timer
+            initialTime={5500000}
+            direction="backward"
+          >
+            {() => (
+              <React.Fragment>
+                Time left: <Timer.Hours />h<Timer.Minutes />m<Timer.Seconds />s
+        </React.Fragment>
+            )}
+          </Timer>
+        </Typography>
         {this.getQuestions()}
         <Button color="primary" variant="contained" fullWidth onClick={() => {
           let submittedTest = {
@@ -167,7 +180,7 @@ class Test extends React.Component {
         <Paper className={this.classes.paper}>
           <Typography component="h1" variant="h5">
             {this.testName}
-        </Typography>
+          </Typography>
           {this.renderContent()}
         </Paper>
       </main>

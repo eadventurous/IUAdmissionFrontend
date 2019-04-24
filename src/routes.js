@@ -21,6 +21,7 @@ import Documents from "views/Documents/Documents.jsx";
 import TestsSelector from "views/Tests/Tests.jsx";
 import UserGroups from "views/UserGroups/UserGroups.jsx"
 import Users from "views/Users/Users.jsx"
+import Candidates from "views/Candidates/Candidates.jsx"
 import TableList from "views/TableList/TableList.jsx";
 import InterviewList from "views/Interviewer/InterviewList.jsx";
 // import Typography from "views/Typography/Typography.jsx";
@@ -128,7 +129,7 @@ export const managerRoutes = [
     path: "/candidates",
     name: "Candidates",
     icon: People,
-    component: Users,
+    component: Candidates,
     layout: "/dashboard"
   },
   {

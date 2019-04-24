@@ -54,6 +54,7 @@ const styles = theme => ({
 });
 
 
+const userTypes = ["candidate", "manager", "interviewer", "admin"];
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -90,6 +91,7 @@ class SignIn extends React.Component {
           response.json().then((data) => {
             console.log(data);
             this.props.dispatch({ type: 'UPDATE', token: data.token });
+            localStorage.setItem(USERTYPE_NAME, userTypes[data.userType]);
             this.props.history.push('/dashboard');
           });
         }
