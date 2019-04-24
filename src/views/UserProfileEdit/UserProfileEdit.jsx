@@ -105,7 +105,7 @@ class UserProfile extends Component {
       .then(() => this.downloadProfilePhoto(this, 'profilePhoto' ))
       .catch(error => console.log(error))
       // console.log(this.state);
-  }
+    }
 
   logOut() {
     fetch(apiUrl + '/auth/logout', {
@@ -125,6 +125,7 @@ class UserProfile extends Component {
 
   sendFormData()
   {
+    this.showOverlay();
     fetch(apiUrl + profilePath, {
       method: 'POST',
       headers: new Headers({
@@ -132,7 +133,8 @@ class UserProfile extends Component {
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(this.getUpdateForm())
-    })
+    }).then(() => this.hideOverlay())
+      .catch(() => alert("Failed to update profile."));
   }
 
   getUpdateForm() {
@@ -262,7 +264,7 @@ class UserProfile extends Component {
       <div>
         <LoadingOverlay
             active={this.state.overlayActive}
-            spinner={<SyncLoader />}
+            spinner={<SyncLoader color="#FFF"/>}
             styles={{
               wrapper: {
                 overflow: this.state.overlayActive ? 'hidden' : 'visible'

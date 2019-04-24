@@ -3,6 +3,11 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
+import Face from "@material-ui/icons/Face";
+import People from "@material-ui/icons/People";
+import PeopleOutline from "@material-ui/icons/PeopleOutline";
+import GroupAdd from "@material-ui/icons/GroupAdd";
+
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Tests from "@material-ui/icons/PlaylistAddCheck"
@@ -61,20 +66,20 @@ export const adminRoutes = [
     path: "/editprofile",
     name: "User Profile",
     icon: Person,
-    component: UserProfile,
+    component: UserProfileEdit,
     layout: "/dashboard"
   },
   {
     path: "/users",
     name: "Users",
-    icon: Person,
+    icon: People,
     component: Users,
     layout: "/dashboard"
   },
   {
     path: "/usergroups",
     name: "User Groups",
-    icon: Person,
+    icon: GroupAdd,
     component: UserGroups,
     layout: "/dashboard"
   },
@@ -82,10 +87,10 @@ export const adminRoutes = [
 
 export const interviewerRoutes = [
   {
-    path: "/profile",
+    path: "/editprofile",
     name: "User Profile",
     icon: Person,
-    component: UserProfile,
+    component: UserProfileEdit,
     layout: "/dashboard"
   },
   {
@@ -99,63 +104,47 @@ export const interviewerRoutes = [
 
 export const managerRoutes = [
   {
-    path: "/profile",
+    path: "/editprofile",
     name: "User Profile",
     icon: Person,
-    component: UserProfile,
+    component: UserProfileEdit,
     layout: "/dashboard"
   },
-]
+  {
+    path: "/programs",
+    name: "Programs",
+    icon: LibraryBooks,
+    component: UserProfileEdit,
+    layout: "/dashboard"
+  },
+  {
+    path: "/editprofile",
+    name: "Tests",
+    icon: LibraryBooks,
+    component: UserProfileEdit,
+    layout: "/dashboard"
+  },
+  {
+    path: "/candidates",
+    name: "Candidates",
+    icon: People,
+    component: Users,
+    layout: "/dashboard"
+  },
+  {
+    path: "/editprofile",
+    name: "Interviews List",
+    icon: Person,
+    component: UserProfileEdit,
+    layout: "/dashboard"
+  },
+  {
+    path: "/users",
+    name: "Archieved Candidates",
+    icon: PeopleOutline,
+    component: Users,
+    layout: "/dashboard"
+  },
 
-// export const dashboardRoutes = [
-//   {
-//     path: "/dashboard",
-//     name: "Dashboard",
-//     icon: Dashboard,
-//     component: DashboardPage,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/profile",
-//     name: "User Profile",
-//     icon: Person,
-//     component: UserProfile,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/table",
-//     name: "Table List",
-//     icon: "content_paste",
-//     component: TableList,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/typography",
-//     name: "Typography",
-//     icon: LibraryBooks,
-//     component: Typography,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/icons",
-//     name: "Icons",
-//     icon: BubbleChart,
-//     component: Icons,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/maps",
-//     name: "Maps",
-//     icon: LocationOn,
-//     component: Maps,
-//     layout: "/dashboard"
-//   },
-//   {
-//     path: "/notifications",
-//     name: "Notifications",
-//     icon: Notifications,
-//     component: NotificationsPage,
-//     layout: "/dashboard"
-//   }
-// ];
+]
 
