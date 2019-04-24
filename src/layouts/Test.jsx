@@ -62,14 +62,22 @@ class Test extends React.Component {
     super(props);
     this.classes = props.classes;
     let test = JSON.parse(localStorage.getItem("test"));
-    this.testId = test.id;
+    this.testId = test.testId;
     this.testName = test.name;
     //console.log(this.classes);
+    var answersMap = new Map();
+    console.log(test);
+    test.questions.forEach((question) => {
+      console.log(question);
+      answersMap.set(parseInt(question.questionId), question.answers[0].answerId);
+    })
+    console.log(answersMap);
     this.state = {
       login: '',
       password: '',
       started: false,
-      answers: new Map(),
+      answers: answersMap,
+      authToken: localStorage.getItem(AUTHTOKEN_NAME),
     };
   }
 
@@ -89,27 +97,32 @@ class Test extends React.Component {
 
   renderContent() {
     if (this.state.started == true) {
-      let answers = [{ text: "answer 1", id: 1 }, { text: "answer 2", id: 3 }];
+      //let answers = [{ text: "answer 1", id: 1 }, { text: "answer 2", id: 3 }];
       let questionId = 0;
+      let answers = [];
+      this.state.answers.forEach((mId, mAnswer, m) => {
+        answers.push({
+          QuestionId: mId,
+          AnswerId: mAnswer,
+        })
+      })
       return (<div>
         {this.getQuestions()}
         <Button color="primary" variant="contained" fullWidth onClick={() => {
+          let submittedTest = {
+            TestId: this.testId,
+            QuestionAnswerPairs: answers,
+          };
+          console.log(submittedTest);
           fetch(apiUrl + "/test/submit", {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             // mode: "no-cors", // no-cors, cors, *same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             headers: {
               "Content-Type": "application/json",
+              'Authorization': this.state.authToken,
             },
-            body: JSON.stringify({
-              TestId: this.testId,
-              QuestionAnswerPairs: this.state.answers.forEach((mId, mAnswer, m) => {
-                return {
-                  QuestionId: mId,
-                  AnswerId: mAnswer,
-                }
-              })
-            }), // body data type must match "Content-Type" header
+            body: JSON.stringify(submittedTest), // body data type must match "Content-Type" header
           })
             .then(
               (response) => {

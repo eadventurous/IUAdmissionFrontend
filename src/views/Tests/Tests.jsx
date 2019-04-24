@@ -68,81 +68,84 @@ class TestsSelector extends Component {
     this.state = {
       profileInfo: [],
       authToken: localStorage.getItem(AUTHTOKEN_NAME),
-      files: []
+      files: [],
+      tests: [],
     };
   }
 
   componentDidMount() {
-    fetch(apiUrl + profilePath, {
+    var tests = [
+      {
+        testId: 1,
+        name: "Math Test",
+        questions: [
+          {
+            questionText: "Question 1",
+            questionId: 1,
+            answers: [
+              {
+                answerText: "hot",
+                answerId: 0,
+              },
+              {
+                answerText: "cold",
+                answerId: 4,
+              }
+            ]
+          },
+          {
+            questionText: "Question 2",
+            questionId: 3,
+            answers: [
+              {
+                answerText: "mean",
+                answerId: 1,
+              },
+              {
+                answerText: "dumb",
+                answerId: 2,
+              }
+            ]
+          }
+        ]
+      },
+      {
+        testId: 2,
+        name: "Programming test",
+        questions: [],
+      }
+    ];
+    fetch(apiUrl + "/test/getTests", {
       method: 'GET',
       headers: new Headers({
         'Authorization': this.state.authToken,
         // 'Content-Type': 'application/json'
       })
     })
-      .then(response => response.json())
-      .then(json => console.log(json));
-  }
-
-  fetchTests() {
-    var tests = {
-      tests: [
-        {
-          testId: 1,
-          name: "Math Test",
-          questions: [
-            {
-              questionText: "Question 1",
-              questionId: 1,
-              answers: [
-                {
-                  answerText: "hot",
-                  answerId: 0,
-                },
-                {
-                  answerText: "cold",
-                  answerId: 4,
-                }
-              ]
-            },
-            {
-              questionText: "Question 2",
-              questionId: 3,
-              answers: [
-                {
-                  answerText: "mean",
-                  answerId: 1,
-                },
-                {
-                  answerText: "dumb",
-                  answerId: 2,
-                }
-              ]
-            }
-          ]
-        },
-        {
-          testId: 2,
-          name: "Programming test",
-          questions: [],
-        }
-      ]
-    }
-    fetch(apiUrl + "/getTests", {
-      method: 'GET',
-      headers: new Headers({
-        'Authorization': this.state.authToken,
-        // 'Content-Type': 'application/json'
+    .then(
+      (response) => {
+        console.log(response.status);
+        // Examine the text in the response
+        response.json().then((data) => {
+          console.log(data);
+          this.setState({
+            tests: data,
+          })
+        });
+      }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+      this.setState({
+        tests: tests,
       })
-    })
-      .then(response => response.json())
-      .then(json => tests = json);
-    return tests.tests;
+    });
   }
 
-  getTests(tests) {
+  getTests() {
     const { classes } = this.classes;
-    return tests.map(test => (
+    //alert(JSON.stringify(tests));
+    return this.state.tests.map(test => (
       <Grid item className={this.classes.paper}>
         <div>
           <Card className={classes.card}>
@@ -173,7 +176,7 @@ class TestsSelector extends Component {
   render() {
     return (
       <Grid container className={this.classes.root} spacing={24}>
-        {this.getTests(this.fetchTests())}
+        {this.getTests()}
       </Grid>
     );
   }
