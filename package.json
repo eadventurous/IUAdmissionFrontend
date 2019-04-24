@@ -23,6 +23,7 @@
     "prop-types": "15.7.1",
     "react": "16.8.1",
     "react-chartist": "0.13.3",
+    "react-compound-timer": "^1.0.12",
     "react-country-region-selector-material-ui-new": "^1.5.2",
     "react-dom": "16.8.1",
     "react-google-maps": "9.4.5",
