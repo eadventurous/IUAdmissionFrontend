@@ -129,13 +129,10 @@ class Test extends React.Component {
                 if (response.status !== 200) {
                   alert("Invalid login or password")
                   return;
+                }else {
+                  alert("Successfully saved");
+                  this.props.history.push("/dashboard/tests");
                 }
-                // Examine the text in the response
-                response.json().then((data) => {
-                  //console.log(data);
-                  //this.props.dispatch({ type: 'UPDATE', token: data.token });
-                  this.props.history.push('/dashboard/tests');
-                });
               }
             )
             .catch(function (err) {
