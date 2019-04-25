@@ -87,21 +87,24 @@ class UserProfile extends Component {
         'Authorization': this.state.authToken,
         //'Content-Type': 'application/json'
       })
-    })
-      .then(response => response.json())
-      // .then(data => console.log(data))
-      .then(data => this.setState({
-        email: data.email,
-        phone_number: data.phone ? data.phone : "",
-        first_name: data.firstName,
-        last_name: data.lastName,
-        city: data.city,
-        country: data.country,
-        postal_code: data.postCode,
-        skype_account: data.skype,
-        telegram_alias: data.telegram,
-        about_me: data.about,
-      }))
+    }).then(response => {
+      if(response.status == 200) {
+        response.json().then(data => this.setState({
+          email: data.email,
+          phone_number: data.phone ? data.phone : "",
+          first_name: data.firstName,
+          last_name: data.lastName,
+          city: data.city,
+          country: data.country,
+          postal_code: data.postCode,
+          skype_account: data.skype,
+          telegram_alias: data.telegram,
+          about_me: data.about,
+        }));
+      }else if (response.status == 511){
+        this.props.history.push("/login");
+      }
+      })
       .then(() => this.downloadProfilePhoto(this, 'profilePhoto'))
       .catch(error => console.log(error))
     // console.log(this.state);

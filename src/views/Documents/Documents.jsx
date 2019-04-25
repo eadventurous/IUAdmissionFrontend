@@ -91,7 +91,10 @@ class DocumentUpload extends Component {
         if(response.status == 200 || response.status == 204)
         {
           response.json().then((data) => {
-            console.log(data);
+            for(var i = 0; i<data.length;i++)
+            {
+              this.setState({[data[i].type]: data[i].fileName});
+            }
           })
         }
       });
@@ -138,13 +141,18 @@ class DocumentUpload extends Component {
         'Content-Type': 'application/json'
       }),
     })// .then(json => console.log(json))
-      .then(response => response.json())
-      .then(function(json) {
-        console.log(json.bytes);
-        return json;
-      })
-      .then(json => {console.log(json); self.fileDownloadCall(self, json.data.fileName, json.bytes);})
-      .then(() => self.hideOverlay(self))
+      .then(response => {
+        if(response.status == 200){
+          response.json().then((data) => {
+            self.fileDownloadCall(self, data.data.fileName, data.bytes)
+          })
+        }else if(response.status == 404){
+          alert("No file provided.");
+        }else{
+          alert("Server error.");
+        }
+        self.hideOverlay(self);
+      });
   }
 
   fileDownloadCall(self, filename, str)

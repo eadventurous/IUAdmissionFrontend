@@ -120,13 +120,6 @@ export const managerRoutes = [
     layout: "/dashboard"
   },
   {
-    path: "/editprofile",
-    name: "Tests",
-    icon: LibraryBooks,
-    component: UserProfileEdit,
-    layout: "/dashboard"
-  },
-  {
     path: "/candidates",
     name: "Candidates",
     icon: People,
@@ -134,10 +127,10 @@ export const managerRoutes = [
     layout: "/dashboard"
   },
   {
-    path: "/editprofile",
+    path: "/profile",
     name: "Interviews List",
     icon: Person,
-    component: UserProfileEdit,
+    component: UserProfile,
     layout: "/dashboard"
   },
   {
@@ -150,7 +143,7 @@ export const managerRoutes = [
   {
     path: "/create-test",
     name: "Create Test",
-    icon: Person,
+    icon: LibraryBooks,
     component: CreateTest,
     layout: "/dashboard"
   }

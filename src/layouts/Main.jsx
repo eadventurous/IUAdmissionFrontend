@@ -47,7 +47,8 @@ class Dashboard extends React.Component {
         this.routes = managerRoutes;
         break;
       default:
-        this.routes = adminRoutes;
+        
+        
     }
   }
 
