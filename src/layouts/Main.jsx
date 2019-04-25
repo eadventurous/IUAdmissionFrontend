@@ -9,9 +9,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Navbar from "components/Navbars/Navbar.jsx";
-import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
 import {candidateRoutes, adminRoutes, interviewerRoutes, managerRoutes} from "routes.js";
 import {USERTYPE_NAME} from "config.js";
@@ -20,6 +18,8 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 
 import image from "assets/img/crowd.jpg";
 import logo from "assets/img/inno_logo.png";
+import { Button } from "@material-ui/core";
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class Dashboard extends React.Component {
       fixedClasses: "dropdown show",
       mobileOpen: false,
       redirecting: false,
-      userType: localStorage.getItem(USERTYPE_NAME)
+      userType: localStorage.getItem(USERTYPE_NAME),
     };
     switch(this.state.userType) {
       case "candidate":
@@ -47,7 +47,8 @@ class Dashboard extends React.Component {
         this.routes = managerRoutes;
         break;
       default:
-        this.routes = candidateRoutes;
+        
+        
     }
   }
 
@@ -121,37 +122,38 @@ class Dashboard extends React.Component {
 
     const { classes, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
-        <Sidebar
-          routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
-          //   if (!elem.hidden) {
-          //     return (elem);
-          //   }
-          // })}
-          logoText={"IU Admission"}
-          logo={logo}
-          image={this.state.image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color={this.state.color}
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Navbar
-            routes={this.routes}
+      
+      <div style={{height: '100%'}} className={classes.wrapper}>
+        
+          <Sidebar
+            routes={this.routes.filter(function(i,n){return !n.hidden})}//{this.routes.map(elem => {
+            //   if (!elem.hidden) {
+            //     return (elem);
+            //   }
+            // })}
+            logoText={"IU Admission"}
+            logo={logo}
+            image={this.state.image}
             handleDrawerToggle={this.handleDrawerToggle}
+            open={this.state.mobileOpen}
+            color={this.state.color}
             {...rest}
           />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and container classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{this.switchRoutes()}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{this.switchRoutes()}</div>
-          )}
-          {/* {this.getRoute() ? <Footer /> : null} */}
-        </div>
+          <div className={classes.mainPanel} ref="mainPanel">
+          
+            <Navbar
+              routes={this.routes}
+              handleDrawerToggle={this.handleDrawerToggle}
+              {...rest}
+            />
+            {this.getRoute() ? (
+              <div className={classes.content}>
+                <div className={classes.container}>{this.switchRoutes()}</div>
+              </div>
+            ) : (
+              <div className={classes.map}>{this.switchRoutes()}</div>
+            )}
+          </div>
       </div>
     );
   }

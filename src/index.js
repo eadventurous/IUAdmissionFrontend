@@ -10,7 +10,7 @@ import { AUTHTOKEN_NAME, USERTYPE_NAME } from "config.js"
 import MainLayout from "layouts/Main.jsx";
 import SignIn from "layouts/SignIn.jsx";
 import SignUp from "layouts/SignUp.jsx";
-
+import Test from "layouts/Test.jsx"
 
 import "assets/css/material-dashboard-react.css?v=1.6.0";
 
@@ -38,9 +38,12 @@ store.subscribe(() => {
 });
 
 ReactDOM.render(
+  
   <Provider store={store}>
     <Router history={hist}>
+  
       <Switch>
+        <Route path="/test" component={Test}/>
         <Route path="/login" component={SignIn} />
         <Route path="/signup" component={SignUp} />
         <Route path="/dashboard" component={MainLayout} />

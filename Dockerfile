@@ -1,13 +1,18 @@
-FROM node:11.13.0
 
-WORKDIR /usr/src/app
+FROM node:carbon
+
+WORKDIR /app
+
 
 COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+# RUN npm install --only=production
 
-EXPOSE 8080
+COPY src src
+COPY public public
+
+
 EXPOSE 3000
 CMD [ "npm", "start" ]
