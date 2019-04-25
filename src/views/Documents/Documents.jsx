@@ -88,7 +88,8 @@ class DocumentUpload extends Component {
       })
     })
       .then(response => {
-        if(response.status == 200 || response.status == 204)
+        
+        if(response.status == 200)
         {
           response.json().then((data) => {
             for(var i = 0; i<data.length;i++)
